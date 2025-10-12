@@ -2,8 +2,5 @@
   "name": "@junglegaming-challenge/typescript-config",
   "version": "0.0.0",
   "private": true,
-  "license": "MIT",
-  "files": [
-    "node.json"
-  ]
+  "license": "MIT"
 }
