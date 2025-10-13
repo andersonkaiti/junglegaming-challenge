@@ -1,0 +1,3 @@
+{
+  "extends": ["@junglegaming-challenge/typescript-config/node.json"]
+}
