@@ -1,0 +1,24 @@
+{
+  "name": "@junglegaming-challenge/config",
+  "version": "0.0.0",
+  "main": "dist/main.js",
+  "private": true,
+  "scripts": {
+    "build": "nest build",
+    "start:dev": "nest start --watch"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/config": "^4.0.2",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@junglegaming-challenge/eslint-config": "workspace:*",
+    "@junglegaming-challenge/prettier": "workspace:*",
+    "@junglegaming-challenge/typescript-config": "workspace:*"
+  },
+  "eslintConfig": {
+    "extends": "@junglegaming-challenge/eslint-config/node"
+  },
+  "prettier": "@junglegaming-challenge/prettier"
+}

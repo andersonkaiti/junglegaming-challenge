@@ -1,0 +1,25 @@
+{
+  "name": "@junglegaming-challenge/rabbitmq",
+  "version": "0.0.0",
+  "main": "dist/main.js",
+  "private": true,
+  "scripts": {
+    "build": "nest build"
+  },
+  "devDependencies": {
+    "@junglegaming-challenge/eslint-config": "workspace:*",
+    "@junglegaming-challenge/prettier": "workspace:*",
+    "@junglegaming-challenge/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "@junglegaming-challenge/config": "workspace:*",
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/microservices": "^11.0.0",
+    "amqp-connection-manager": "^5.0.0",
+    "amqplib": "^0.10.9"
+  },
+  "eslintConfig": {
+    "extends": "@junglegaming-challenge/eslint-config/node"
+  },
+  "prettier": "@junglegaming-challenge/prettier"
+}
