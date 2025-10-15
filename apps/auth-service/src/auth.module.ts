@@ -1,14 +1,13 @@
-import { ConfigModule } from '@junglegaming-challenge/config'
-import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
 import { AuthController } from './auth.controller'
-import { AuthService } from './auth.service'
+import { envSchema } from './env.schema'
 
 @Module({
   imports: [
-    ConfigModule,
-    RabbitMQModule.register({
-      name: 'AUTH',
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: (env) => envSchema.parse(env),
     }),
   ],
   controllers: [AuthController],

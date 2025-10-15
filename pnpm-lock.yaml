@@ -14,15 +14,15 @@ importers:
 
   apps/api-gateway:
     dependencies:
-      '@junglegaming-challenge/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@junglegaming-challenge/rabbitmq':
         specifier: workspace:*
         version: link:../../packages/rabbitmq
       '@nestjs/common':
         specifier: ^11.1.6
         version: 11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nestjs/core':
         specifier: ^11.1.6
         version: 11.1.6(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.6)(@nestjs/platform-express@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -38,6 +38,9 @@ importers:
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@junglegaming-challenge/eslint-config':
         specifier: workspace:*
@@ -84,15 +87,15 @@ importers:
 
   apps/auth-service:
     dependencies:
-      '@junglegaming-challenge/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@junglegaming-challenge/rabbitmq':
         specifier: workspace:*
         version: link:../../packages/rabbitmq
       '@nestjs/common':
         specifier: ^11.1.6
         version: 11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nestjs/core':
         specifier: ^11.1.6
         version: 11.1.6(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.6)(@nestjs/platform-express@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -108,6 +111,9 @@ importers:
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@junglegaming-challenge/eslint-config':
         specifier: workspace:*
@@ -154,15 +160,15 @@ importers:
 
   apps/notifications-service:
     dependencies:
-      '@junglegaming-challenge/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@junglegaming-challenge/rabbitmq':
         specifier: workspace:*
         version: link:../../packages/rabbitmq
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nestjs/core':
         specifier: ^11.0.1
         version: 11.1.6(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.6)(@nestjs/platform-express@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -178,6 +184,9 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@junglegaming-challenge/eslint-config':
         specifier: workspace:*
@@ -224,15 +233,15 @@ importers:
 
   apps/tasks-service:
     dependencies:
-      '@junglegaming-challenge/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@junglegaming-challenge/rabbitmq':
         specifier: workspace:*
         version: link:../../packages/rabbitmq
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nestjs/core':
         specifier: ^11.0.1
         version: 11.1.6(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.6)(@nestjs/platform-express@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -248,6 +257,9 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@junglegaming-challenge/eslint-config':
         specifier: workspace:*
@@ -315,33 +327,8 @@ importers:
 
   config/typescript-config: {}
 
-  packages/config:
-    dependencies:
-      '@nestjs/common':
-        specifier: ^11.1.6
-        version: 11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@nestjs/config':
-        specifier: ^4.0.2
-        version: 4.0.2(@nestjs/common@11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
-      zod:
-        specifier: ^4.1.12
-        version: 4.1.12
-    devDependencies:
-      '@junglegaming-challenge/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@junglegaming-challenge/prettier':
-        specifier: workspace:*
-        version: link:../../config/prettier
-      '@junglegaming-challenge/typescript-config':
-        specifier: workspace:*
-        version: link:../../config/typescript-config
-
   packages/rabbitmq:
     dependencies:
-      '@junglegaming-challenge/config':
-        specifier: workspace:*
-        version: link:../config
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.6(reflect-metadata@0.2.2)(rxjs@7.8.2)
