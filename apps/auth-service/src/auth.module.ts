@@ -1,7 +1,8 @@
+import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { AuthController } from './auth.controller'
-import { envSchema } from './env.schema'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { RegisterController } from './controllers/register.controller'
+import { Env, envSchema } from './env.schema'
 
 @Module({
   imports: [
@@ -9,8 +10,18 @@ import { envSchema } from './env.schema'
       isGlobal: true,
       validate: (env) => envSchema.parse(env),
     }),
+    RabbitMQModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService<Env, true>) => {
+        const rabbitMQUri = configService.get('RABBIT_MQ_URI', { infer: true })
+
+        return {
+          queue: 'TASKS',
+          rabbitMQUris: [rabbitMQUri],
+        }
+      },
+    }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
+  controllers: [RegisterController],
 })
 export class AuthModule {}
