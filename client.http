@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3000
+
+# @name create_user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "anderkaiti@gmail.com",
+  "username": "andersonkaiti",
+  "password": "123456"
+}

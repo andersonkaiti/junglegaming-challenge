@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Env } from '../env.schema'
+import User from './entities/user.entity'
 
 @Module({
   imports: [
@@ -14,11 +15,11 @@ import { Env } from '../env.schema'
         username: configService.get('POSTGRES_USER', { infer: true }),
         password: configService.get('POSTGRES_PASSWORD', { infer: true }),
         database: configService.get('POSTGRES_DB', { infer: true }),
-        entities: [],
+        entities: [User],
         synchronize: false,
       }),
     }),
-    TypeOrmModule.forFeature(),
+    TypeOrmModule.forFeature([User]),
   ],
   exports: [TypeOrmModule],
 })

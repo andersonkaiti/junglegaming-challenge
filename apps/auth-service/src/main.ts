@@ -1,4 +1,5 @@
 import { RabbitMQService } from '@junglegaming-challenge/rabbitmq'
+import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { RmqOptions } from '@nestjs/microservices'
@@ -8,6 +9,13 @@ import { Env } from './env.schema'
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule)
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    })
+  )
 
   const rabbitMQService = app.get<RabbitMQService>(RabbitMQService)
 
