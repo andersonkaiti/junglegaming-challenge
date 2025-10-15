@@ -2,6 +2,7 @@ import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { RegisterController } from './controllers/register.controller'
+import { DatabaseModule } from './database/database.module'
 import { Env, envSchema } from './env.schema'
 
 @Module({
@@ -21,6 +22,7 @@ import { Env, envSchema } from './env.schema'
         }
       },
     }),
+    DatabaseModule,
   ],
   controllers: [RegisterController],
 })
