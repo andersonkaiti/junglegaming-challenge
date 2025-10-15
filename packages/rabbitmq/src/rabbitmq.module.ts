@@ -1,47 +1,51 @@
-import {
-  ConfigModule,
-  ConfigService,
-  Env,
-} from '@junglegaming-challenge/config'
 import { DynamicModule, Module } from '@nestjs/common'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { RabbitMQService } from './rabbitmq.service'
 
 interface IRabbitMQModuleOptions {
-  name: string
+  queue: string
+  rabbitMQUris: string[]
+}
+
+interface IRabbitMQAsyncOptions {
+  name?: string
+  useFactory: (
+    ...args: any[]
+  ) => Promise<IRabbitMQModuleOptions> | IRabbitMQModuleOptions
+  inject?: any[]
+  imports?: any[]
 }
 
 @Module({
-  imports: [ConfigModule],
   providers: [RabbitMQService],
   exports: [RabbitMQService],
 })
 export class RabbitMQModule {
-  static register({ name }: IRabbitMQModuleOptions): DynamicModule {
+  static registerAsync(options: IRabbitMQAsyncOptions): DynamicModule {
     return {
       module: RabbitMQModule,
       imports: [
+        ...(options.imports || []),
         ClientsModule.registerAsync([
           {
-            name,
-            useFactory: (configService: ConfigService<Env, true>) => ({
-              transport: Transport.RMQ,
-              options: {
-                urls: [
-                  configService.get<string>('RABBIT_MQ_URI', {
-                    infer: true,
-                  }),
-                ],
-                queue: configService.get<string>(`RABBIT_MQ_${name}_QUEUE`, {
-                  infer: true,
-                }),
-              },
-            }),
-            inject: [ConfigService],
+            name: options.name || 'RABBITMQ_CLIENT',
+            inject: options.inject || [],
+            useFactory: async (...args: any[]) => {
+              const { queue, rabbitMQUris } = await options.useFactory(...args)
+
+              return {
+                transport: Transport.RMQ,
+                options: {
+                  urls: rabbitMQUris,
+                  queue,
+                },
+              }
+            },
           },
         ]),
       ],
-      exports: [ClientsModule],
+      providers: [RabbitMQService],
+      exports: [RabbitMQService, ClientsModule],
     }
   }
 }
