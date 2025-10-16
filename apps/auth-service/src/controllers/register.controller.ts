@@ -32,7 +32,11 @@ export class RegisterController {
         password,
       })
 
-      return this.userRepository.save(user)
+      const saved = await this.userRepository.save(user)
+
+      const { password: _password, ...savedUser } = saved
+
+      return savedUser
     } catch (err) {
       throw new RpcException({
         message: err.message,
