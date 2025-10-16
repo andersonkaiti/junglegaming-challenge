@@ -12,7 +12,6 @@
     "@junglegaming-challenge/typescript-config": "workspace:*"
   },
   "dependencies": {
-    "@junglegaming-challenge/config": "workspace:*",
     "@nestjs/common": "^11.0.1",
     "@nestjs/microservices": "^11.0.0",
     "amqp-connection-manager": "^5.0.0",

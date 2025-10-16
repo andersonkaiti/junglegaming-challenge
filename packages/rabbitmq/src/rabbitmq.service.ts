@@ -1,23 +1,24 @@
-import { ConfigService, Env } from '@junglegaming-challenge/config'
 import { Injectable } from '@nestjs/common'
 import { RmqContext, RmqOptions, Transport } from '@nestjs/microservices'
 
+interface IRabbitMQServiceOptions {
+  queue: string
+  rabbitMQUris: string[]
+  noAck: boolean
+}
+
 @Injectable()
 export class RabbitMQService {
-  constructor(private readonly configService: ConfigService<Env, true>) {}
-
-  getOptions(queue: string, noAck = false): RmqOptions {
+  getOptions({
+    queue,
+    rabbitMQUris,
+    noAck = false,
+  }: IRabbitMQServiceOptions): RmqOptions {
     return {
       transport: Transport.RMQ,
       options: {
-        urls: [
-          this.configService.get<string>('RABBIT_MQ_URI', {
-            infer: true,
-          }),
-        ],
-        queue: this.configService.get<string>(`RABBIT_MQ_${queue}_QUEUE`, {
-          infer: true,
-        }),
+        urls: [...rabbitMQUris],
+        queue,
         noAck,
         persistent: true,
       },
@@ -26,7 +27,9 @@ export class RabbitMQService {
 
   ack(context: RmqContext) {
     const channel = context.getChannelRef()
+
     const originalMessage = context.getMessage()
+
     channel.ack(originalMessage)
   }
 }

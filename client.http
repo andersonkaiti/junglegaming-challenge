@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:3000
+@token = {{authenticate_user.response.body.token}}
+
+# @name create_user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "anderkaiti@gmail.com",
+  "username": "andersonkaiti",
+  "password": "123456"
+}
+
+###
+
+# @name authenticate_user
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "anderkaiti@gmail.com",
+  "password": "123456"
+}
+
+###
+
+# @name refresh_token
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+Authorization: Bearer {{token}}

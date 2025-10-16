@@ -1,17 +1,23 @@
-import { ConfigModule } from '@junglegaming-challenge/config'
-import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
-import { AuthController } from './auth.controller'
-import { AuthService } from './auth.service'
+import { ConfigModule } from '@nestjs/config'
+import { JwtModuleWrapper } from './auth/jwt.module'
+import { LoginController } from './controllers/login.controller'
+import { RefreshTokenController } from './controllers/refresh-token.controller'
+import { RegisterController } from './controllers/register.controller'
+import { DatabaseModule } from './database/database.module'
+import { envSchema } from './env.schema'
+import { RabbitMQModuleWrapper } from './rabbitmq/rabbitmq.module'
 
 @Module({
   imports: [
-    ConfigModule,
-    RabbitMQModule.register({
-      name: 'AUTH',
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: (env) => envSchema.parse(env),
     }),
+    RabbitMQModuleWrapper,
+    DatabaseModule,
+    JwtModuleWrapper,
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
+  controllers: [RegisterController, LoginController, RefreshTokenController],
 })
 export class AuthModule {}

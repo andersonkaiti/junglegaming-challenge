@@ -1,7 +1,0 @@
-{
-  "compilerOptions": {
-    "outDir": "dist"
-  },
-  "extends": ["@junglegaming-challenge/typescript-config/node.json"],
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
-}
