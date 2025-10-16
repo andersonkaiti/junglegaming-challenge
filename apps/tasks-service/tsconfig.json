@@ -1,3 +1,10 @@
 {
-  "extends": ["@junglegaming-challenge/typescript-config/node.json"]
+  "extends": "@junglegaming-challenge/typescript-config/node.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolvePackageJsonExports": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
 }
