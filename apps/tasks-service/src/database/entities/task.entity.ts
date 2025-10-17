@@ -6,6 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import Comment from './comment.entity'
 import TaskUser from './task-user.entity'
 
 export enum TaskPriority {
@@ -95,6 +96,9 @@ class Task {
 
   @OneToMany(() => TaskUser, (taskUser) => taskUser.task)
   taskUsers: TaskUser[]
+
+  @OneToMany(() => Comment, (comment) => comment.task, { onDelete: 'CASCADE' })
+  comments: Comment[]
 }
 
 export default Task
