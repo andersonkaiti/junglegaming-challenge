@@ -1,9 +1,13 @@
-import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { Env, envSchema } from './env.schema'
-import { TasksController } from './tasks.controller'
-import { TasksService } from './tasks.service'
+import { ConfigModule } from '@nestjs/config'
+import { CreateTaskController } from './controllers/create-task.controller'
+import { DeleteTaskController } from './controllers/delete-task.controller'
+import { FindTasksController } from './controllers/find-tasks.controller'
+import { GetTaskController } from './controllers/get-task.controller'
+import { UpdateTaskController } from './controllers/update-task.controller'
+import { DatabaseModule } from './database/database.module'
+import { envSchema } from './env.schema'
+import { TasksRabbitMQModule } from './rabbitmq/tasks-rabbitmq.module'
 
 @Module({
   imports: [
@@ -11,30 +15,15 @@ import { TasksService } from './tasks.service'
       isGlobal: true,
       validate: (env) => envSchema.parse(env),
     }),
-    RabbitMQModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<Env, true>) => {
-        const rabbitMQUri = configService.get('RABBIT_MQ_URI', { infer: true })
-
-        return {
-          queue: 'TASKS',
-          rabbitMQUris: [rabbitMQUri],
-        }
-      },
-    }),
-    RabbitMQModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<Env, true>) => {
-        const rabbitMQUri = configService.get('RABBIT_MQ_URI', { infer: true })
-
-        return {
-          queue: 'NOTIFICATIONS',
-          rabbitMQUris: [rabbitMQUri],
-        }
-      },
-    }),
+    TasksRabbitMQModule,
+    DatabaseModule,
   ],
-  controllers: [TasksController],
-  providers: [TasksService],
+  controllers: [
+    CreateTaskController,
+    FindTasksController,
+    DeleteTaskController,
+    GetTaskController,
+    UpdateTaskController,
+  ],
 })
 export class TasksModule {}

@@ -2,14 +2,12 @@ import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Env } from '../env.schema'
-import { CreateCommentController } from './create-comment.controller'
-import { CreateTaskController } from './create-task.controller'
-import { DeleteTaskController } from './delete-task.controller'
-import { FindTasksController } from './find-tasks.controller'
+import { CreateTaskController } from './controllers/create-task.controller'
+import { DeleteTaskController } from './controllers/delete-task.controller'
+import { FindTasksController } from './controllers/find-tasks.controller'
+import { GetTaskController } from './controllers/get-task.controller'
+import { UpdateTaskController } from './controllers/update-task.controller'
 import { GatewayService } from './gateway.service'
-import { GetTaskController } from './get-task.controller'
-import { ListCommentsController } from './list-comments.controller'
-import { UpdateTaskController } from './update-task.controller'
 
 @Module({
   imports: [
@@ -27,13 +25,11 @@ import { UpdateTaskController } from './update-task.controller'
     }),
   ],
   controllers: [
-    FindTasksController,
     CreateTaskController,
+    FindTasksController,
+    DeleteTaskController,
     GetTaskController,
     UpdateTaskController,
-    DeleteTaskController,
-    CreateCommentController,
-    ListCommentsController,
   ],
   providers: [GatewayService],
 })
