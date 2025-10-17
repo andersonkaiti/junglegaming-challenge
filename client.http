@@ -60,3 +60,20 @@ DELETE {{baseUrl}}/api/tasks/efe71e3b-7362-49e3-8070-d13d8982efd5
 
 # @name get_task
 GET {{baseUrl}}/api/tasks/772d2469-3f2c-4920-81bc-d7e353954041
+
+###
+
+# @name update_task
+PUT {{baseUrl}}/api/tasks/92aa5c74-7db9-4dc6-94b0-0ed10c861f5d
+Content-Type: application/json
+
+{
+  "title": "Simple title 22",
+  "description": "Simple description 22",
+  "dueDate": "2024-06-13T10:00:00.000Z",
+  "priority": "LOW",
+  "status": "TODO",
+  "createdAt": "2025-10-16T19:24:59.077Z",
+  "updatedAt": "2025-10-16T19:24:59.077Z",
+  "userIds": ["de71f3d4-4e12-4bef-8bc1-7004ca31089a"]
+}
