@@ -50,3 +50,8 @@ Content-Type: application/json
 
 # @name find_tasks
 GET {{baseUrl}}/api/tasks
+
+###
+
+# @name delete_task
+DELETE {{baseUrl}}/api/tasks/efe71e3b-7362-49e3-8070-d13d8982efd5

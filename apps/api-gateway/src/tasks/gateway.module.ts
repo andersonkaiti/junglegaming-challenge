@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Env } from '../env.schema'
 import { CreateTaskController } from './controllers/create-task.controller'
+import { DeleteTaskController } from './controllers/delete-task.controller'
 import { FindTasksController } from './controllers/find-tasks.controller'
 import { GatewayService } from './gateway.service'
 
@@ -21,7 +22,11 @@ import { GatewayService } from './gateway.service'
       },
     }),
   ],
-  controllers: [CreateTaskController, FindTasksController],
+  controllers: [
+    CreateTaskController,
+    FindTasksController,
+    DeleteTaskController,
+  ],
   providers: [GatewayService],
 })
 export class TasksGatewayModule {}

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { CreateTaskController } from './controllers/create-task.controller'
+import { DeleteTaskController } from './controllers/delete-task.controller'
 import { FindTasksController } from './controllers/find-tasks.controller'
 import { DatabaseModule } from './database/database.module'
 import { envSchema } from './env.schema'
@@ -15,6 +16,10 @@ import { TasksRabbitMQModule } from './rabbitmq/tasks-rabbitmq.module'
     TasksRabbitMQModule,
     DatabaseModule,
   ],
-  controllers: [CreateTaskController, FindTasksController],
+  controllers: [
+    CreateTaskController,
+    FindTasksController,
+    DeleteTaskController,
+  ],
 })
 export class TasksModule {}
