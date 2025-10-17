@@ -28,3 +28,20 @@ Content-Type: application/json
 POST {{baseUrl}}/api/auth/refresh
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+
+
+###
+
+# @name create_task
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Simple title",
+  "description": "Simple description",
+  "dueDate": "2024-06-13T10:00:00.000Z",
+  "priority": "LOW",
+  "status": "TODO",
+  "userIds": ["39fec937-57c1-4309-9f0f-242f6d647b38", "de71f3d4-4e12-4bef-8bc1-7004ca31089a"]
+}
