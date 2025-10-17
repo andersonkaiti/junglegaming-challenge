@@ -55,3 +55,8 @@ GET {{baseUrl}}/api/tasks
 
 # @name delete_task
 DELETE {{baseUrl}}/api/tasks/efe71e3b-7362-49e3-8070-d13d8982efd5
+
+###
+
+# @name get_task
+GET {{baseUrl}}/api/tasks/772d2469-3f2c-4920-81bc-d7e353954041

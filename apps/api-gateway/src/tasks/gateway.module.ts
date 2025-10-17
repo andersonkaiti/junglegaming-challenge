@@ -5,6 +5,7 @@ import { Env } from '../env.schema'
 import { CreateTaskController } from './controllers/create-task.controller'
 import { DeleteTaskController } from './controllers/delete-task.controller'
 import { FindTasksController } from './controllers/find-tasks.controller'
+import { GetTaskController } from './controllers/get-task.controller'
 import { GatewayService } from './gateway.service'
 
 @Module({
@@ -26,6 +27,7 @@ import { GatewayService } from './gateway.service'
     CreateTaskController,
     FindTasksController,
     DeleteTaskController,
+    GetTaskController,
   ],
   providers: [GatewayService],
 })
