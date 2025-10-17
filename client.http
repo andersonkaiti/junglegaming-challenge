@@ -45,3 +45,8 @@ Content-Type: application/json
   "status": "TODO",
   "userIds": ["39fec937-57c1-4309-9f0f-242f6d647b38", "de71f3d4-4e12-4bef-8bc1-7004ca31089a"]
 }
+
+###
+
+# @name find_tasks
+GET {{baseUrl}}/api/tasks

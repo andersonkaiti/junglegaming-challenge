@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Env } from '../env.schema'
 import { CreateTaskController } from './controllers/create-task.controller'
+import { FindTasksController } from './controllers/find-tasks.controller'
 import { GatewayService } from './gateway.service'
 
 @Module({
@@ -20,7 +21,7 @@ import { GatewayService } from './gateway.service'
       },
     }),
   ],
-  controllers: [CreateTaskController],
+  controllers: [CreateTaskController, FindTasksController],
   providers: [GatewayService],
 })
 export class TasksGatewayModule {}
