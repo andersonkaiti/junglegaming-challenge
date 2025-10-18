@@ -7,6 +7,7 @@ import { CreateTaskController } from './controllers/create-task.controller'
 import { DeleteTaskController } from './controllers/delete-task.controller'
 import { FindTasksController } from './controllers/find-tasks.controller'
 import { GetTaskController } from './controllers/get-task.controller'
+import { ListCommentsController } from './controllers/list-comments.controller'
 import { UpdateTaskController } from './controllers/update-task.controller'
 import { GatewayService } from './gateway.service'
 
@@ -32,6 +33,7 @@ import { GatewayService } from './gateway.service'
     GetTaskController,
     UpdateTaskController,
     CreateCommentController,
+    ListCommentsController,
   ],
   providers: [GatewayService],
 })

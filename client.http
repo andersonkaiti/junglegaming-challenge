@@ -89,3 +89,9 @@ Authorization: Bearer {{token}}
   "text": "One simple comment for testing",
   "userId": "f6114fa8-3ada-49dc-a625-778eb780e6a3"
 }
+
+###
+
+# @name list_comments
+GET {{baseUrl}}/api/tasks/01a39b93-e983-4b05-85be-6f89d9950efb/comments
+Authorization: Bearer {{token}}
