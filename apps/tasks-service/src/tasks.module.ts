@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { CreateCommentController } from './controllers/create-comment.controller'
 import { CreateTaskController } from './controllers/create-task.controller'
 import { DeleteTaskController } from './controllers/delete-task.controller'
 import { FindTasksController } from './controllers/find-tasks.controller'
@@ -24,6 +25,7 @@ import { TasksRabbitMQModule } from './rabbitmq/tasks-rabbitmq.module'
     DeleteTaskController,
     GetTaskController,
     UpdateTaskController,
+    CreateCommentController,
   ],
 })
 export class TasksModule {}

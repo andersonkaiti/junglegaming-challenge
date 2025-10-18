@@ -77,3 +77,15 @@ Content-Type: application/json
   "updatedAt": "2025-10-16T19:24:59.077Z",
   "userIds": ["de71f3d4-4e12-4bef-8bc1-7004ca31089a"]
 }
+
+###
+
+# @name create_comment
+POST {{baseUrl}}/api/tasks/01a39b93-e983-4b05-85be-6f89d9950efb/comments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "text": "One simple comment for testing",
+  "userId": "f6114fa8-3ada-49dc-a625-778eb780e6a3"
+}
