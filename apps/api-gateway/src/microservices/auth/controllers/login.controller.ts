@@ -1,6 +1,6 @@
 import { Body, Controller, HttpException, Post } from '@nestjs/common'
+import { GatewayService } from '../gateway.service'
 import { LoginDTO } from './dto/login.dto'
-import { GatewayService } from './gateway.service'
 
 const DEFAULT_ERROR_STATUS_CODE = 500
 

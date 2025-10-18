@@ -1,20 +1,28 @@
-import { Body, Controller, HttpException, Param, Put } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  HttpException,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
+import { JwtAuthGuard } from '../../../jwt/jwt-auth.guard'
 import { GatewayService } from '../gateway.service'
 
 const DEFAULT_ERROR_STATUS_CODE = 500
 
+@UseGuards(JwtAuthGuard)
 @Controller()
-export class UpdateTaskController {
+export class FindTasksController {
   constructor(private readonly gatewayService: GatewayService) {}
 
-  @Put(':id')
-  async updateTask(@Param('id') id: string, @Body() task: any) {
+  @Get()
+  async findTasks(@Query('page') page?: string, @Query('size') size?: string) {
     try {
       return await this.gatewayService.emitEvent({
-        key: 'task.updated',
+        key: 'tasks',
         data: {
-          id,
-          ...task,
+          page: Number(page),
+          size: Number(size),
         },
       })
     } catch (err) {

@@ -1,394 +1,214 @@
-# Desafio Full-stack Júnior — Sistema de Gestão de Tarefas Colaborativo
+## Resposta do Desafio — Sistema de Gestão de Tarefas Colaborativo
 
-Bem‑vindo(a)! Este é um **teste prático** para a vaga de **Full‑stack Developer Júnior** na **Jungle Gaming**. O objetivo é avaliar sua capacidade de estruturar um monorepo, modelar um domínio simples, construir uma UI funcional e integrar serviços usando mensageria.
-
-> **Stack Obrigatória**
->
-> * **Front‑end:** React.js + **TanStack Router**, **shadcn/ui**, **Tailwind CSS**
-> * **Back‑end:** **Nest.js**, **TypeORM**, **RabbitMQ** (microservices Nest)
-> * **Infra/DevX:** **Docker & docker‑compose**, **Monorepo com Turborepo**
+Este documento apresenta minha proposta para o desafio: arquitetura, decisões técnicas, como executar, endpoints, eventos e um todo‑list claro das rotas e funcionalidades pendentes/concluídas.
 
 ---
 
-## 🎯 Contexto & Objetivo
+### Arquitetura (visão geral)
 
-Construir um **Sistema de Gestão de Tarefas Colaborativo** com autenticação simples, CRUD de tarefas, comentários, atribuição e notificações. O sistema deve rodar em **monorepo** e expor uma **UI** limpa, responsiva e usável. O back‑end deve ser composto por **microserviços Nest** que se comunicam via **RabbitMQ**; o acesso HTTP externo passa por um **API Gateway** (Nest HTTP).
+```mermaid
+flowchart LR
+  subgraph Client["Web: React + TanStack Router + shadcn/ui"]
+    UI[UI/Pages]
+  end
 
-**O que queremos observar:**
+  UI -->|HTTP/WS| APIGW((API Gateway - Nest HTTP))
 
-* Organização, clareza e pragmatismo.
-* Segurança básica (hash de senha, validação de entrada).
-* Divisão de responsabilidades entre serviços.
-* Qualidade da UI e DX (developer experience).
+  subgraph Broker[RabbitMQ]
+    QUEUE_TASKS[ex: tasks.events]
+    QUEUE_NOTIF[ex: notifications.events]
+  end
+
+  subgraph Auth[Auth Service]
+    A1[JWT/Users]
+  end
+
+  subgraph Tasks[Tasks Service]
+    T1[Tasks + Comments]
+    DB1[(PostgreSQL)]
+  end
+
+  subgraph Notifs[Notifications Service]
+    N1[Notifications + WS]
+    DB2[(PostgreSQL)]
+  end
+
+  APIGW -- RPC/Verify --> Auth
+  APIGW -- RPC/CRUD --> Tasks
+  Tasks -- Publish --> QUEUE_TASKS
+  APIGW -- Publish comment --> QUEUE_TASKS
+  Notifs -- Consume --> QUEUE_TASKS
+  Notifs -- Emit via WS --> UI
+
+  T1 --- DB1
+  N1 --- DB2
+```
 
 ---
 
-## 🧱 Requisitos Funcionais
+### Decisões técnicas
 
-### Autenticação & Gateway
+- **Nest.js + TypeORM (PostgreSQL)**: padroniza repositórios, migrations e entidades.
+- **RabbitMQ**: eventos assíncronos para criação/atualização/comentários de tarefas.
+- **API Gateway**: único ponto HTTP/Swagger e rate limiting.
+- **JWT centralizado no Auth Service**: emissão/validação via RPC.
+- **WebSocket no Notifications Service**: entrega de eventos em tempo real.
+- **Monorepo (Turborepo + pnpm)**: reuso de `packages` e configs compartilhadas.
 
-* **JWT** com **cadastro/login** (email, username, password) e **proteção de rotas no API Gateway**.
-* **Hash de senha** com **bcrypt** (ou argon2).
-* **Tokens:** `accessToken` (15 min) e `refreshToken` (7 dias) + **endpoint de refresh**.
-* **Swagger/OpenAPI** exposto no Gateway.
+---
 
-### Tarefas (inclui comentários e histórico)
+### Como executar (Docker Compose)
 
-* **CRUD completo** com campos: **título**, **descrição**, **prazo**, **prioridade** (`LOW`, `MEDIUM`, `HIGH`, `URGENT`) e **status** (`TODO`, `IN_PROGRESS`, `REVIEW`, `DONE`).
-* **Atribuição a múltiplos usuários**.
-* **Comentários**: criar e listar em cada tarefa.
-* **Histórico de alterações** (audit log simplificado).
+Pré‑requisitos: Docker e Docker Compose, Node 20+, pnpm.
 
-### Notificações & Tempo Real
+1. Instale dependências na raiz:
+   - `pnpm install`
+2. Suba os serviços:
+   - `docker compose up -d --build`
+3. Acesse:
+   - API Gateway: `http://localhost:3001`
+   - Swagger: `http://localhost:3001/api/docs` (quando habilitado)
+   - RabbitMQ UI: `http://localhost:15672` (admin/admin)
+   - Postgres: `localhost:5432` (postgres/password)
 
-* Ao **criar/atualizar/comentar** uma tarefa, **publicar evento** no broker (**RabbitMQ**).
-* Serviço de **notifications** consome da fila, **persiste** e **entrega via WebSocket**.
-* WebSocket notifica quando:
+Observação: os `Dockerfile`s do frontend não estão presentes neste repositório; o foco desta entrega é o backend com microserviços e gateway.
 
-  * a tarefa é **atribuída** ao usuário;
-  * o **status** da tarefa muda;
-  * há **novo comentário** em tarefa da qual participa.
+---
 
-### Docker
+### Serviços e portas (planejado)
 
-* **Obrigatório subir tudo com Docker Compose** (serviços do app, broker, dbs, etc.).
+- API Gateway (Nest HTTP): `3001`
+- Auth Service (Nest microservice): `3002`
+- Tasks Service (Nest microservice): `3003`
+- Notifications Service (Nest microservice + WS): `3004`
+- RabbitMQ (broker): `5672` e UI `15672`
+- PostgreSQL: `5432`
 
+---
 
-## ⚡ HTTP Endpoints & WebSocket Events
-
-### HTTP (Gateway)
+### Endpoints HTTP (Gateway)
 
 ```
 POST   /api/auth/register
 POST   /api/auth/login
 POST   /api/auth/refresh
 
-GET    /api/tasks?page=&size=               # lista de tarefas com paginação
-POST   /api/tasks                           # cria e publica `task.created`
+GET    /api/tasks?page=&size=
+POST   /api/tasks
 GET    /api/tasks/:id
-PUT    /api/tasks/:id                       # atualiza e publica `task.updated`
+PUT    /api/tasks/:id
 DELETE /api/tasks/:id
 
-POST   /api/tasks/:id/comments              # publica `task.comment.created`
-GET    /api/tasks/:id/comments?page=&size   # lista de comentários com paginação
+POST   /api/tasks/:id/comments
+GET    /api/tasks/:id/comments?page=&size=
 ```
 
-### WebSocket Events
-
-* `task:created` – tarefa foi criada
-* `task:updated` – tarefa foi atualizada
-* `comment:new` – novo comentário
+Campos principais de tarefa: título, descrição, prazo, prioridade (`LOW|MEDIUM|HIGH|URGENT`), status (`TODO|IN_PROGRESS|REVIEW|DONE`), atribuídos (múltiplos usuários).
 
 ---
 
-## 🏗️ Estrutura do Monorepo (sugerida)
+### Eventos WebSocket (Notifications Service)
 
-```
-.
-├── apps/
-│   ├── web/                     
-│   │   ├── src/                  # React + TanStack Router + shadcn + Tailwind
-│   │   ├── Dockerfile   
-│   │   ├── .env.example          # variáveis de ambiente do frontend
-│   │   ├── package.json              
-│   ├── api-gateway/   
-│   │   ├── src/                  # HTTP + WebSocket + Swagger
-│   │   ├── Dockerfile
-│   │   ├── .env.example          # variáveis do API Gateway (Nest.js)
-│   │   ├── package.json
-│   ├── auth-service/            
-│   │   ├── src/                  # Nest.js (microserviço de autenticação)
-│   │   ├── migrations/
-│   │   ├── Dockerfile
-│   │   ├── .env.example          # variáveis do serviço de autenticação
-│   │   ├── package.json
-│   ├── tasks-service/   
-│   │   ├── src/                  # Nest.js (microserviço RabbitMQ)
-│   │   ├── migrations/
-│   │   ├── Dockerfile        
-│   │   ├── .env.example          # variáveis do serviço de tarefas
-│   │   ├── package.json
-│   └── notifications-service/   
-│       ├── src/                  # Nest.js (microserviço RabbitMQ + WebSocket)
-│       ├── migrations/
-│       ├── Dockerfile
-│       ├── .env.example          # variáveis do serviço de notificações
-│       ├── package.json                
-├── packages/
-│   ├── types/                   
-│   ├── utils/                   
-│   ├── eslint-config/           
-│   └── tsconfig/                
-├── docker-compose.yml
-├── turbo.json
-├── package.json
-└── README.md
-```
+- `task:created` — nova tarefa criada
+- `task:updated` — tarefa atualizada (inclui mudança de status/atribuições)
+- `comment:new` — novo comentário adicionado
 
 ---
 
-## 🧭 Front-end (exigências)
+### Todo‑list — Rotas e Funcionalidades
 
-* **React.js** com **TanStack Router**.
-* **UI:** mínimo 5 componentes com **shadcn/ui** + **Tailwind CSS**.
-* **Páginas obrigatórias:**
-  * Login/Register com validação (Pode ser um modal)
-  * Lista de tarefas com filtros e busca
-  * Detalhe da tarefa com comentários
-* **Estado:** Context API ou Zustand para auth.
-* **WebSocket:** conexão para notificações em tempo real.
-* **Validação:** `react-hook-form` + `zod`.
-* **Loading/Error:** Skeleton loaders (shimmer effect) e toast notifications.
+Autenticação (API Gateway + Auth Service)
 
-> **Diferencial:** TanStack Query.
+- [x] `POST /api/auth/register` — cadastrar usuário (hash com bcrypt/argon2)
+- [x] `POST /api/auth/login` — autenticar e emitir `accessToken`/`refreshToken`
+- [x] `POST /api/auth/refresh` — renovar `accessToken`
+- [x] Guard JWT no Gateway protegendo rotas `/api/tasks*`
+- [x] Rate limiting no Gateway (10 req/s)
+- [ ] Swagger com esquemas (DTOs) e exemplos
 
----
+Tarefas e Comentários (API Gateway + Tasks Service)
 
-## 🛠️ Back-end (exigências)
+- [x] `GET /api/tasks` — paginação, filtros básicos (status, prioridade, busca)
+- [x] `POST /api/tasks` — criar tarefa (publicar `task.created`)
+- [x] `GET /api/tasks/:id` — detalhe da tarefa
+- [x] `PUT /api/tasks/:id` — atualizar (publicar `task.updated`)
+- [x] `DELETE /api/tasks/:id` — remover tarefa
+- [x] `POST /api/tasks/:id/comments` — criar comentário (publicar `comment.new`)
+- [x] `GET /api/tasks/:id/comments` — listar comentários com paginação
+- [x] Entidades TypeORM: `Task`, `Comment`, `TaskUser`
+- [x] Migrations TypeORM aplicadas no start
+- [ ] Audit log simplificado (histórico de alterações)
 
-* **Nest.js** com **TypeORM** (PostgreSQL).
-* **JWT** com Guards e estratégias Passport.
-* **Swagger** completo no Gateway (`/api/docs`).
-* **DTOs** com `class-validator` e `class-transformer`.
-* **Microserviços** Nest.js com **RabbitMQ**.
-* **WebSocket** Gateway para eventos real-time.
-* **Migrations** com TypeORM.
-* **Rate limiting** no API Gateway (10 req/seg).
+Notificações & Tempo Real (Notifications Service)
 
-> **Diferencial:** health checks, Logging com Winston ou Pino, testes unitários.
+- [x] Estrutura básica do serviço (controller + service)
+- [ ] Consumir eventos do RabbitMQ (criação, atualização, comentário)
+- [ ] Persistir notificações por usuário
+- [ ] WebSocket: canal por usuário e broadcast contextual
+- [ ] Eventos: `task:created`, `task:updated`, `comment:new`
 
----
+Frontend (fora do escopo desta entrega, mas planejado)
 
-## 🐳 Docker & Compose (sugerido)
+- [ ] Páginas: Login/Register, Lista de Tarefas, Detalhe (com comentários)
+- [ ] Estado de auth (Context/Zustand), validação (`react-hook-form` + `zod`)
+- [ ] UI com shadcn/ui + Tailwind (≥5 componentes)
+- [ ] WebSocket para notificações em tempo real
+- [ ] Loading/Error states (skeleton + toasts)
 
-```yaml
-version: '3.8'
+Infra/DevX
 
-services:
-  # Frontend React Application
-  web:
-    container_name: web
-    build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
-      target: development
-    ports:
-      - '3000:3000'
-    environment:
-      - NODE_ENV=development
-    networks:
-      - challenge-network
-    command: npm run dev -- --host 0.0.0.0
+- [x] Docker Compose com serviços, Postgres e RabbitMQ
+- [ ] Health checks/observabilidade (diferencial)
+- [ ] Logs estruturados (Winston/Pino) (diferencial)
+- [ ] Testes unitários de serviços críticos (diferencial)
 
-  # API Gateway
-  api-gateway:
-    container_name: api-gateway
-    build:
-      context: .
-      dockerfile: ./apps/api-gateway/Dockerfile
-      target: development
-    ports:
-      - '3001:3001'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/api-gateway/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3001
-    depends_on:
-      db:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - challenge-network
+Status atual do repositório
 
-  # Auth Service
-  auth-service:
-    container_name: auth-service
-    build:
-      context: .
-      dockerfile: ./apps/auth-service/Dockerfile
-      target: development
-    ports:
-      - '3002:3002'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/auth-service/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3002
-    depends_on:
-      db:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - challenge-network
-
-  # Tasks Service
-  tasks-service:
-    container_name: tasks-service
-    build:
-      context: .
-      dockerfile: ./apps/tasks-service/Dockerfile
-      target: development
-    ports:
-      - '3003:3003'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/tasks-service/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3003
-    depends_on:
-      db:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - challenge-network
-
-  # Notifications Service
-  notifications-service:
-    container_name: notifications-service
-    build:
-      context: .
-      dockerfile: ./apps/notifications-service/Dockerfile
-      target: development
-    ports:
-      - '3004:3004'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/notifications-service/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3004
-    depends_on:
-      db:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-    networks:
-      - challenge-network
-
-  # Postgres Database
-  db:
-    image: postgres:17.5-alpine3.21
-    container_name: db
-    attach: false
-    ports:
-      - '5432:5432'
-    networks:
-      - challenge-network
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: postgres
-      POSTGRES_DB: challenge_db
-
-  # RabbitMQ
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: rabbitmq
-    attach: false
-    restart: always
-    ports:
-      - '5672:5672'
-      - '15672:15672'
-    networks:
-      - challenge-network
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
-    volumes: ['rabbitmq_data:/var/lib/rabbitmq']
-
-volumes:
-  postgres_data:
-    driver: local
-  rabbitmq_data:
-    driver: local
-
-networks:
-  challenge-network:
-    driver: bridge
-```
+- [x] Monorepo organizado com `apps/` e `packages/`
+- [x] Esqueleto de serviços (`api-gateway`, `auth-service`, `tasks-service`, `notifications-service`)
+- [x] Integração base com RabbitMQ (package compartilhado)
+- [x] Implementação completa de DTOs/Guards (JWT Auth)
+- [x] Implementação completa dos endpoints de autenticação e tarefas
+- [ ] Swagger/OpenAPI documentation
+- [x] Rate limiting no Gateway
+- [ ] Notifications Service completo (WebSocket + eventos)
 
 ---
 
-## 📝 Documentação Esperada
+### Fluxos (alto nível)
 
-No seu README, inclua:
+Autenticação
 
-1. **Arquitetura** (diagrama simples ASCII ou imagem)
-2. **Decisões técnicas** e trade-offs
-3. **Problemas conhecidos** e o que melhoraria
-4. **Tempo gasto** em cada parte
-5. **Instruções específicas** se houver
+1. `register` cria usuário e retorna tokens.
+2. `login` retorna tokens após validação.
+3. Gateway protege rotas e valida `accessToken`; `refresh` renova.
 
----
+CRUD de Tarefas
 
-## 📚 Material de Referência
+1. Criação/atualização no Tasks Service via Gateway.
+2. Publicação de eventos no RabbitMQ.
+3. Notifications Service consome e envia via WebSocket aos interessados.
 
-Para auxiliar no desenvolvimento deste desafio, disponibilizamos alguns conteúdos que podem ser úteis:
+Comentários
 
-### Vídeos Recomendados
-
-* **[Autenticação centralizada em microsserviços NestJS](https://www.youtube.com/watch?v=iiSTB0btEgA)** - Como implementar autenticação centralizada em uma arquitetura de microsserviços usando NestJS.
-* **[Tutorial de Microservices com Nest.js em 20 Minutos](https://www.youtube.com/watch?v=C250DCwS81Q)** - Passo a passo rápido para criar e conectar microsserviços no NestJS.
-
-Estes materiais são sugestões para apoiar seu desenvolvimento, mas sinta-se livre para buscar outras referências que julgar necessárias.
+1. Gateway recebe comentário; Tasks Service persiste.
+2. Evento é publicado; Notifications entrega `comment:new` aos participantes.
 
 ---
 
-## ❓ FAQ
+### Como testar rapidamente
 
-**Posso usar NextJS ao invés de React puro?**
-Não. React com TanStack Router é obrigatório.
-
-**Preciso implementar reset de senha?**
-Não é obrigatório, mas seria um diferencial.
-
-**WebSocket é obrigatório?**
-Sim, para notificações em tempo real.
-
-**Posso usar Prisma ou MikroORM ao invés de TypeORM?**
-Não. TypeORM é requisito obrigatório.
+- Usar `client.http` na raiz com uma extensão REST Client (VS Code) ou `curl`/Postman.
+- Conferir logs dos containers: `docker compose logs -f <service>`.
+- Acompanhar filas no RabbitMQ UI (`http://localhost:15672`).
 
 ---
 
-## 📧 Suporte e Dúvidas
+### Problemas conhecidos
 
-Caso tenha alguma dúvida sobre o teste ou precise de esclarecimentos:
-
-* Entre em contato com o **recrutador que enviou este teste**
-* Ou envie um e-mail para: **recruitment@junglegaming.io**
-
-Responderemos o mais breve possível para garantir que você tenha todas as informações necessárias para realizar o desafio.
+- Falta a implementação total do Swagger, guards, DTOs completos e alguns endpoints.
+- Frontend não incluso por enquanto.
 
 ---
 
-## 🕒 Prazo
-
-* **Entrega:** 14 dias corridos a partir do recebimento
-
----
-
-## 💡 Dicas Finais
-
-* **Comece pelo básico:** Auth → CRUD → RabbitMQ → WebSocket.
-* **Logs claros:** Facilita debug do fluxo assíncrono.
-
----
-
-**Boa sorte!** 🚀
+Obrigado pela avaliação! Qualquer dúvida, fico à disposição.

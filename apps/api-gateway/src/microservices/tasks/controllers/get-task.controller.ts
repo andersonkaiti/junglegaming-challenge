@@ -1,19 +1,28 @@
-import { Body, Controller, HttpException, Post } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  UseGuards,
+} from '@nestjs/common'
+import { JwtAuthGuard } from '../../../jwt/jwt-auth.guard'
 import { GatewayService } from '../gateway.service'
-import { CreateTaskDTO } from './dto/create-task.dto'
 
 const DEFAULT_ERROR_STATUS_CODE = 500
 
+@UseGuards(JwtAuthGuard)
 @Controller()
-export class CreateTaskController {
+export class GetTaskController {
   constructor(private readonly gatewayService: GatewayService) {}
 
-  @Post()
-  async createTask(@Body() data: CreateTaskDTO) {
+  @Get(':id')
+  async getTask(@Param('id') id: string) {
     try {
       return await this.gatewayService.emitEvent({
-        key: 'task.created',
-        data,
+        key: 'task.get',
+        data: {
+          id,
+        },
       })
     } catch (err) {
       throw new HttpException(

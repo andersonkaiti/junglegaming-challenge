@@ -1,20 +1,19 @@
-import { Controller, Headers, HttpException, Post } from '@nestjs/common'
-import { GatewayService } from './gateway.service'
+import { Body, Controller, HttpException, Post } from '@nestjs/common'
+import { GatewayService } from '../gateway.service'
+import { RegisterDTO } from './dto/register.dto'
 
 const DEFAULT_ERROR_STATUS_CODE = 500
 
 @Controller()
-export class RefreshController {
+export class RegisterController {
   constructor(private readonly gatewayService: GatewayService) {}
 
-  @Post('refresh')
-  async refresh(@Headers('authorization') token: string) {
+  @Post('register')
+  async register(@Body() data: RegisterDTO) {
     try {
       return await this.gatewayService.emitEvent({
-        key: 'refresh',
-        data: {
-          token,
-        },
+        key: 'register',
+        data,
       })
     } catch (err) {
       throw new HttpException(

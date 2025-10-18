@@ -2,20 +2,23 @@ import { Body, Controller } from '@nestjs/common'
 import { MessagePattern, RpcException } from '@nestjs/microservices'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import Task from '../database/entities/task.entity'
-import { FindTasksDTO } from './dto/find-tasks.dto'
+import Comment from '../database/entities/comment.entity'
+import { ListCommentsDTO } from './dto/list-comments.dto'
 
 @Controller()
-export class FindTasksController {
+export class ListCommentsController {
   constructor(
-    @InjectRepository(Task) private readonly taskRepository: Repository<Task>
+    @InjectRepository(Comment)
+    private readonly commentRepository: Repository<Comment>
   ) {}
 
-  @MessagePattern('tasks')
-  async findTasks(@Body() { page, size = 10 }: FindTasksDTO) {
+  @MessagePattern('task.comments')
+  listComments(@Body() { id, page, size }: ListCommentsDTO) {
     try {
-      return await this.taskRepository.find({
-        relations: ['taskUsers'],
+      return this.commentRepository.find({
+        where: {
+          taskId: id,
+        },
         take: size,
         skip: page * size - size,
       })

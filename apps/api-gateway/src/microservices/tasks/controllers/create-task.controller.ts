@@ -1,20 +1,27 @@
-import { Controller, Delete, HttpException, Param } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpException,
+  Post,
+  UseGuards,
+} from '@nestjs/common'
+import { JwtAuthGuard } from '../../../jwt/jwt-auth.guard'
 import { GatewayService } from '../gateway.service'
+import { CreateTaskDTO } from './dto/create-task.dto'
 
 const DEFAULT_ERROR_STATUS_CODE = 500
 
+@UseGuards(JwtAuthGuard)
 @Controller()
-export class DeleteTaskController {
+export class CreateTaskController {
   constructor(private readonly gatewayService: GatewayService) {}
 
-  @Delete(':id')
-  async deleteTask(@Param('id') id: string) {
+  @Post()
+  async createTask(@Body() data: CreateTaskDTO) {
     try {
       return await this.gatewayService.emitEvent({
-        key: 'task.deleted',
-        data: {
-          id,
-        },
+        key: 'task.created',
+        data,
       })
     } catch (err) {
       throw new HttpException(

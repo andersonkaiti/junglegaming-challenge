@@ -1,11 +1,13 @@
 import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Env } from '../env.schema'
+import { Env } from '../../env.schema'
+import { CreateCommentController } from './controllers/create-comment.controller'
 import { CreateTaskController } from './controllers/create-task.controller'
 import { DeleteTaskController } from './controllers/delete-task.controller'
 import { FindTasksController } from './controllers/find-tasks.controller'
 import { GetTaskController } from './controllers/get-task.controller'
+import { ListCommentsController } from './controllers/list-comments.controller'
 import { UpdateTaskController } from './controllers/update-task.controller'
 import { GatewayService } from './gateway.service'
 
@@ -30,6 +32,8 @@ import { GatewayService } from './gateway.service'
     DeleteTaskController,
     GetTaskController,
     UpdateTaskController,
+    CreateCommentController,
+    ListCommentsController,
   ],
   providers: [GatewayService],
 })
