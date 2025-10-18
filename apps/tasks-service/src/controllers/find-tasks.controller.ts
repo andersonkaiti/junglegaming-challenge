@@ -1,8 +1,9 @@
-import { Controller } from '@nestjs/common'
+import { Body, Controller } from '@nestjs/common'
 import { MessagePattern, RpcException } from '@nestjs/microservices'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import Task from '../database/entities/task.entity'
+import { FindTasksDTO } from './dto/find-tasks.dto'
 
 @Controller()
 export class FindTasksController {
@@ -11,10 +12,12 @@ export class FindTasksController {
   ) {}
 
   @MessagePattern('tasks')
-  async findTasks() {
+  async findTasks(@Body() { page, size = 10 }: FindTasksDTO) {
     try {
       return await this.taskRepository.find({
         relations: ['taskUsers'],
+        take: size,
+        skip: page * size - size,
       })
     } catch (err) {
       throw new RpcException({
