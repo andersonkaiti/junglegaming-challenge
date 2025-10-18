@@ -1,7 +1,7 @@
 import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Env } from '../env.schema'
+import { Env } from '../../env.schema'
 import { LoginController } from './controllers/login.controller'
 import { RefreshController } from './controllers/refresh.controller'
 import { RegisterController } from './controllers/register.controller'

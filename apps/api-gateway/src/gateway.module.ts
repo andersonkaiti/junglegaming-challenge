@@ -2,10 +2,10 @@ import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { RouterModule } from '@nestjs/core'
-import { AuthGatewayModule } from './auth/gateway.module'
 import { envSchema } from './env.schema'
 import { AuthModule } from './jwt/auth.module'
-import { TasksGatewayModule } from './tasks/gateway.module'
+import { AuthGatewayModule } from './microservices/auth/gateway.module'
+import { TasksGatewayModule } from './microservices/tasks/gateway.module'
 
 @Module({
   imports: [

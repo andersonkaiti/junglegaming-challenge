@@ -3,32 +3,25 @@ import {
   Get,
   HttpException,
   Param,
-  Query,
   UseGuards,
 } from '@nestjs/common'
-import { JwtAuthGuard } from '../../jwt/jwt-auth.guard'
+import { JwtAuthGuard } from '../../../jwt/jwt-auth.guard'
 import { GatewayService } from '../gateway.service'
 
 const DEFAULT_ERROR_STATUS_CODE = 500
 
 @UseGuards(JwtAuthGuard)
 @Controller()
-export class ListCommentsController {
+export class GetTaskController {
   constructor(private readonly gatewayService: GatewayService) {}
 
-  @Get(':id/comments')
-  async listComments(
-    @Param('id') id: string,
-    @Query('page') page?: string,
-    @Query('size') size?: string
-  ) {
+  @Get(':id')
+  async getTask(@Param('id') id: string) {
     try {
       return await this.gatewayService.emitEvent({
-        key: 'task.comments',
+        key: 'task.get',
         data: {
           id,
-          page: Number(page),
-          size: Number(size),
         },
       })
     } catch (err) {
