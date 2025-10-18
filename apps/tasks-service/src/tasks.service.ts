@@ -1,18 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Body, Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
+import { firstValueFrom } from 'rxjs'
+import { RabbitMQDTO } from './rabbitmq.dto'
 
 @Injectable()
-export class TasksService {
+export class RabbitMQService {
   constructor(
     @Inject('NOTIFICATIONS') private readonly rabbitMQClient: ClientProxy
   ) {}
 
-  getHello() {
-    console.log('Event emitted')
-
-    return this.rabbitMQClient.emit(
-      'notifications_event',
-      'Notifications event!'
-    )
+  emitEvent(@Body() { key, data = {} }: RabbitMQDTO) {
+    return firstValueFrom(this.rabbitMQClient.emit(key, data))
   }
 }

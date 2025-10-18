@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import Comment from '../database/entities/comment.entity'
 import Task from '../database/entities/task.entity'
+import { RabbitMQService } from '../tasks.service'
 import { CreateCommentDTO } from './dto/create-comment.dto'
 
 @Controller()
@@ -11,7 +12,8 @@ export class CreateCommentController {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
-    @InjectRepository(Task) private readonly taskRepository: Repository<Task>
+    @InjectRepository(Task) private readonly taskRepository: Repository<Task>,
+    private readonly rabbitMQService: RabbitMQService
   ) {}
 
   @MessagePattern('task.comment.created')
@@ -31,7 +33,14 @@ export class CreateCommentController {
 
       const comment = this.commentRepository.create(data)
 
-      return this.commentRepository.save(comment)
+      const savedComment = await this.commentRepository.save(comment)
+
+      this.rabbitMQService.emitEvent({
+        key: 'comment:new',
+        data: savedComment,
+      })
+
+      return savedComment
     } catch (err) {
       throw new RpcException({
         message: err.message,

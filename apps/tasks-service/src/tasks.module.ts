@@ -9,7 +9,9 @@ import { ListCommentsController } from './controllers/list-comments.controller'
 import { UpdateTaskController } from './controllers/update-task.controller'
 import { DatabaseModule } from './database/database.module'
 import { envSchema } from './env.schema'
+import { NotificationsRabbitMQModule } from './rabbitmq/notifications-rabbitmq.module'
 import { TasksRabbitMQModule } from './rabbitmq/tasks-rabbitmq.module'
+import { RabbitMQService } from './tasks.service'
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { TasksRabbitMQModule } from './rabbitmq/tasks-rabbitmq.module'
       validate: (env) => envSchema.parse(env),
     }),
     TasksRabbitMQModule,
+    NotificationsRabbitMQModule,
     DatabaseModule,
   ],
   controllers: [
@@ -29,5 +32,7 @@ import { TasksRabbitMQModule } from './rabbitmq/tasks-rabbitmq.module'
     CreateCommentController,
     ListCommentsController,
   ],
+  providers: [RabbitMQService],
+  exports: [RabbitMQService],
 })
 export class TasksModule {}
