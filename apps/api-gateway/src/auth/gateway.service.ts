@@ -1,7 +1,7 @@
 import { Body, Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
-import { GatewayDTO } from './dto/gateway.dto'
+import { GatewayDTO } from './controllers/dto/gateway.dto'
 
 @Injectable()
 export class GatewayService {
