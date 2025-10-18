@@ -1,6 +1,8 @@
 import { ValidationPipe } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { ThrottlerGuard } from '@nestjs/throttler'
+import { Env } from './env.schema'
 import { GatewayModule } from './gateway.module'
 
 async function bootstrap() {
@@ -17,7 +19,13 @@ async function bootstrap() {
 
   app.useGlobalGuards(app.get(ThrottlerGuard))
 
-  await app.listen(process.env.PORT ?? 3000)
+  const configService = app.get<ConfigService<Env, true>>(ConfigService)
+
+  const PORT = configService.get('PORT', { infer: true })
+
+  await app.listen(PORT)
+
+  console.log(`🚀 API Gateway listening on port ${PORT}`)
 }
 
 bootstrap()

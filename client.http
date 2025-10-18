@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3001
 @token = {{authenticate_user.response.body.token}}
 @refreshedToken = {{refresh_token.response.body.token}}
 

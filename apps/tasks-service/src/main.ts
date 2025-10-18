@@ -31,6 +31,12 @@ async function bootstrap() {
   )
 
   await app.startAllMicroservices()
+
+  const PORT = configService.get('PORT', { infer: true })
+
+  await app.listen(PORT)
+
+  console.log(`🚀 Tasks service listening on port ${PORT}`)
 }
 
 bootstrap()
