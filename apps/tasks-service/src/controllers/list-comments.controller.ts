@@ -13,12 +13,14 @@ export class ListCommentsController {
   ) {}
 
   @MessagePattern('task.comments')
-  listComments(@Body() { id }: ListCommentsDTO) {
+  listComments(@Body() { id, page, size }: ListCommentsDTO) {
     try {
       return this.commentRepository.find({
         where: {
           taskId: id,
         },
+        take: size,
+        skip: page * size - size,
       })
     } catch (err) {
       throw new RpcException({

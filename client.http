@@ -93,5 +93,5 @@ Authorization: Bearer {{token}}
 ###
 
 # @name list_comments
-GET {{baseUrl}}/api/tasks/01a39b93-e983-4b05-85be-6f89d9950efb/comments
+GET {{baseUrl}}/api/tasks/01a39b93-e983-4b05-85be-6f89d9950efb/comments?page=1&size=4
 Authorization: Bearer {{token}}
