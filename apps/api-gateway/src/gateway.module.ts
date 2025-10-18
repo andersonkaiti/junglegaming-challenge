@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config'
 import { RouterModule } from '@nestjs/core'
 import { AuthGatewayModule } from './auth/gateway.module'
 import { envSchema } from './env.schema'
+import { AuthModule } from './jwt/auth.module'
 import { TasksGatewayModule } from './tasks/gateway.module'
 
 @Module({
@@ -25,6 +26,7 @@ import { TasksGatewayModule } from './tasks/gateway.module'
     ]),
     AuthGatewayModule,
     TasksGatewayModule,
+    AuthModule,
   ],
 })
 export class GatewayModule {}
