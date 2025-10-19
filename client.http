@@ -1,5 +1,6 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3001
 @token = {{authenticate_user.response.body.token}}
+@refreshedToken = {{refresh_token.response.body.token}}
 
 # @name create_user
 POST {{baseUrl}}/api/auth/register
@@ -36,7 +37,7 @@ Authorization: Bearer {{token}}
 # @name create_task
 POST {{baseUrl}}/api/tasks
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}
 
 
 {
@@ -52,26 +53,26 @@ Authorization: Bearer {{token}}
 
 # @name find_tasks
 GET {{baseUrl}}/api/tasks?page=1&size=1
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}
 
 ###
 
 # @name delete_task
 DELETE {{baseUrl}}/api/tasks/85e0cdfa-900e-499b-8891-2ba5bbc8fb9b
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}
 
 ###
 
 # @name get_task
 GET {{baseUrl}}/api/tasks/85e0cdfa-900e-499b-8891-2ba5bbc8fb9b
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}
 
 ###
 
 # @name update_task
-PUT {{baseUrl}}/api/tasks/92aa5c74-7db9-4dc6-94b0-0ed10c861f5d
+PUT {{baseUrl}}/api/tasks/98307037-9e38-42c4-80cc-7cb8811f4bb1
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}
 
 {
   "title": "Simple title 22",
@@ -87,9 +88,9 @@ Authorization: Bearer {{token}}
 ###
 
 # @name create_comment
-POST {{baseUrl}}/api/tasks/01a39b93-e983-4b05-85be-6f89d9950efb/comments
+POST {{baseUrl}}/api/tasks/80d2e996-9f1f-4911-a1ed-3249ffbb0af8/comments
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}
 
 {
   "text": "One simple comment for testing",
@@ -100,4 +101,4 @@ Authorization: Bearer {{token}}
 
 # @name list_comments
 GET {{baseUrl}}/api/tasks/01a39b93-e983-4b05-85be-6f89d9950efb/comments?page=1&size=4
-Authorization: Bearer {{token}}
+Authorization: Bearer {{refreshedToken}}

@@ -5,6 +5,8 @@
     "moduleResolution": "node",
     "resolvePackageJsonExports": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "outDir": "./dist",
+    "baseUrl": "./"
   }
 }

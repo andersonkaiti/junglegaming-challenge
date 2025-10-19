@@ -2,7 +2,7 @@ import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { RouterModule } from '@nestjs/core'
-import { ThrottlerModule } from '@nestjs/throttler'
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { envSchema } from './env.schema'
 import { AuthModule } from './jwt/auth.module'
 import { AuthGatewayModule } from './microservices/auth/gateway.module'
@@ -40,5 +40,6 @@ const TEN_SECONDS = 10 * ONE_SECOND
     TasksGatewayModule,
     AuthModule,
   ],
+  providers: [ThrottlerGuard],
 })
 export class GatewayModule {}

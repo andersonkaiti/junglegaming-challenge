@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import TaskUser from '../database/entities/task-user.entity'
 import Task from '../database/entities/task.entity'
+import { RabbitMQService } from '../tasks.service'
 import { UpdateTaskDTO } from './dto/update-task.dto'
 
 @Controller()
@@ -11,7 +12,8 @@ export class UpdateTaskController {
   constructor(
     @InjectRepository(Task) private readonly taskRepository: Repository<Task>,
     @InjectRepository(TaskUser)
-    private readonly taskUserRepository: Repository<TaskUser>
+    private readonly taskUserRepository: Repository<TaskUser>,
+    private readonly rabbitMQService: RabbitMQService
   ) {}
 
   @MessagePattern('task.updated')
@@ -44,6 +46,14 @@ export class UpdateTaskController {
 
         newUserIds = await this.taskUserRepository.save(relations)
       }
+
+      this.rabbitMQService.emitEvent({
+        key: 'task:updated',
+        data: {
+          ...taskData,
+          newUserIds,
+        },
+      })
 
       return {
         ...taskData,

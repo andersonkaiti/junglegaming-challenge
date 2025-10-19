@@ -1,9 +1,11 @@
-import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { Env, envSchema } from './env.schema'
-import { NotificationsController } from './notifications.controller'
-import { NotificationsService } from './notifications.service'
+import { ConfigModule } from '@nestjs/config'
+import { CommentCreatedController } from './controllers/comment-created.controller'
+import { TaskCreatedController } from './controllers/task-created.controller'
+import { TaskUpdatedController } from './controllers/task-updated.controller'
+import { envSchema } from './env.schema'
+import { NotificationsRabbitMQModule } from './rabbitmq/notifications-rabbitmq.module'
+import { WebSocketModule } from './websocket/websocket.module'
 
 @Module({
   imports: [
@@ -11,19 +13,13 @@ import { NotificationsService } from './notifications.service'
       isGlobal: true,
       validate: (env) => envSchema.parse(env),
     }),
-    RabbitMQModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<Env, true>) => {
-        const rabbitMQUri = configService.get('RABBIT_MQ_URI', { infer: true })
-
-        return {
-          queue: 'NOTIFICATIONS',
-          rabbitMQUris: [rabbitMQUri],
-        }
-      },
-    }),
+    NotificationsRabbitMQModule,
+    WebSocketModule,
   ],
-  controllers: [NotificationsController],
-  providers: [NotificationsService],
+  controllers: [
+    CommentCreatedController,
+    TaskCreatedController,
+    TaskUpdatedController,
+  ],
 })
 export class NotificationsModule {}

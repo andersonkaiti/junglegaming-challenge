@@ -8,6 +8,7 @@ export const envSchema = z.object({
   POSTGRES_DB: z.string(),
   POSTGRES_PORT: z.coerce.number(),
   SECRET_KEY: z.string(),
+  PORT: z.coerce.number(),
 })
 
 export type Env = z.infer<typeof envSchema>

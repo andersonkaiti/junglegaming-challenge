@@ -6,7 +6,6 @@ import { Env } from '../env.schema'
 @Module({
   imports: [
     RabbitMQModule.registerAsync({
-      name: 'NOTIFICATIONS',
       inject: [ConfigService],
       useFactory: (configService: ConfigService<Env, true>) => {
         const rabbitMQUri = configService.get('RABBIT_MQ_URI', { infer: true })
