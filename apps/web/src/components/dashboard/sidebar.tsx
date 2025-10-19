@@ -53,14 +53,20 @@ export function DashboardSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <Link to="/" className="flex items-center gap-2">
+                  <Link
+                    to="/dashboard/tasks"
+                    className="flex items-center gap-2"
+                  >
                     <Home className="size-3.5" />
                     <span>Tarefas</span>
                   </Link>
                 </SidebarMenuButton>
 
                 <SidebarMenuButton>
-                  <Link to="/" className="flex items-center gap-2">
+                  <Link
+                    to="/dashboard/tasks"
+                    className="flex items-center gap-2"
+                  >
                     <Wrench className="size-3.5" />
                     <span>Configurações</span>
                   </Link>

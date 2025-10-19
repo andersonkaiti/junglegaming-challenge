@@ -11,7 +11,7 @@ import { Input } from '@components/ui/input'
 import { useSignIn } from '@hooks/use-sign-in.hook'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/sign-in')({
+export const Route = createFileRoute('/auth/sign-in')({
   component: Home,
 })
 
