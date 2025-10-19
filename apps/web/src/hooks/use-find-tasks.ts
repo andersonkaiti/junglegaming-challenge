@@ -7,8 +7,6 @@ export function useFindTasks() {
   const [page] = useQueryState('page', parseAsInteger.withDefault(1))
   const [size] = useQueryState('size', parseAsInteger.withDefault(13))
 
-  console.log(page, size)
-
   const { refetch, data, ...rest } = useQuery({
     queryKey: ['tasks', page, size],
     queryFn: async () =>
