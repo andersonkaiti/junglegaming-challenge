@@ -16,11 +16,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@components/ui/sidebar'
+import { useLogOut } from '@hooks/use-log-out'
 import { Link } from '@tanstack/react-router'
 import { EllipsisVertical, Home, LogOut, Wrench } from 'lucide-react'
 import { UserProfile } from './user-profile'
 
 export function DashboardSidebar() {
+  const { logOut } = useLogOut()
+
   return (
     <Sidebar>
       <SidebarHeader className="pt-4">
@@ -36,7 +39,7 @@ export function DashboardSidebar() {
 
             <DropdownMenuContent>
               <DropdownMenuItem asChild>
-                <Button variant="ghost" className="w-full">
+                <Button variant="ghost" className="w-full" onClick={logOut}>
                   <LogOut />
                   <span>Deslogar</span>
                 </Button>

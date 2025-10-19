@@ -4,10 +4,21 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@components/ui/sidebar'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardLayout,
+  beforeLoad: () => {
+    const hasToken = document.cookie
+      .split('; ')
+      .some((row) => row.trim().startsWith('token='))
+
+    if (!hasToken) {
+      throw redirect({
+        to: '/auth/sign-in',
+      })
+    }
+  },
 })
 
 function DashboardLayout() {
