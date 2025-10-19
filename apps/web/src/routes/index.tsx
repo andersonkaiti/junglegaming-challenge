@@ -20,7 +20,7 @@ function Dashboard() {
           <SidebarTrigger className="mt-4 ml-4 cursor-pointer" />
 
           <div className="flex h-full items-center justify-center">
-            <h1>Dashboard</h1>
+            <h1>Tarefas</h1>
           </div>
         </div>
       </SidebarInset>
