@@ -1,4 +1,13 @@
+import { Button } from '@components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@components/ui/dropdown-menu'
 import type { ColumnDef } from '@tanstack/react-table'
+import { EllipsisVertical } from 'lucide-react'
 
 interface ITaskUser {
   id: string
@@ -57,5 +66,28 @@ export const tasksColumns: ColumnDef<ITasks>[] = [
         original: { status },
       },
     }) => status,
+  },
+  {
+    id: 'actions',
+    header: 'Ações',
+    cell: () => (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <EllipsisVertical />
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          <DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Button variant="ghost" className="w-full">
+                Editar
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ),
   },
 ]

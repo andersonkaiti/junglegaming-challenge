@@ -1,3 +1,5 @@
+import { redirect } from '@tanstack/react-router'
+import { HTTPError } from 'ky'
 import { api } from '../api-client'
 
 interface ITaskUser {
@@ -6,7 +8,7 @@ interface ITaskUser {
   userId: string
 }
 
-interface IFindTasksResponse {
+interface ITask {
   id: string
   title: string
   description: string
@@ -18,6 +20,44 @@ interface IFindTasksResponse {
   taskUsers: ITaskUser[]
 }
 
-export async function findTasks(): Promise<IFindTasksResponse[]> {
-  return await api.get('tasks').json()
+interface IFindTaskRequest {
+  page: number
+  size: number
+}
+
+export interface IFindTasksResponse {
+  page: number
+  size: number
+  total: number
+  tasks: ITask[]
+}
+
+const STATUS_CODE_UNAUTHORIZED = 401
+
+export async function findTasks({
+  page,
+  size,
+}: IFindTaskRequest): Promise<IFindTasksResponse> {
+  const searchParams = new URLSearchParams()
+
+  searchParams.append('page', String(page))
+  searchParams.append('size', String(size))
+
+  try {
+    return await api.get(`tasks?${searchParams}`).json()
+  } catch (err) {
+    if (err instanceof HTTPError) {
+      const errorBody = await err.response.json()
+
+      if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
+        document.cookie =
+          'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
+
+        throw redirect({
+          to: '/auth/sign-in',
+        })
+      }
+    }
+    throw err
+  }
 }

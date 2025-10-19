@@ -30,6 +30,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@http/*": ["./src/http/*"],
       "@lib/*": ["./src/lib/*"],
+      "@providers/*": ["./src/providers/*"],
       "@/*": ["./src/*"]
     }
   },

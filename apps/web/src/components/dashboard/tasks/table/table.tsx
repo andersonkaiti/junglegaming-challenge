@@ -1,28 +1,21 @@
 import { DataTable } from '@components/ui/data-table'
+import { useFindTasks } from '@hooks/use-find-tasks'
+import Paginator from '../paginator'
 import { tasksColumns } from './columns'
+import { LoadingSkeleton } from './loading-skeleton'
 
-interface ITaskUser {
-  id: string
-  taskId: string
-  userId: string
-}
+export function TasksTable() {
+  const { data, page, isLoading } = useFindTasks()
 
-interface ITasks {
-  id: string
-  title: string
-  description: string
-  dueDate: Date
-  priority: string
-  status: string
-  createdAt: Date
-  updatedAt: Date
-  taskUsers: ITaskUser[]
-}
+  return (
+    <div className="flex h-full flex-col justify-between gap-4 py-5">
+      {isLoading && <LoadingSkeleton />}
 
-interface ITasksTable {
-  tasks: ITasks[]
-}
+      {!isLoading && (
+        <DataTable columns={tasksColumns} data={data?.tasks || []} />
+      )}
 
-export function TasksTable({ tasks }: ITasksTable) {
-  return <DataTable columns={tasksColumns} data={tasks} />
+      <Paginator currentPage={page} totalPages={data?.total || 10} />
+    </div>
+  )
 }
