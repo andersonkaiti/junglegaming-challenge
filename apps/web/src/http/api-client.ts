@@ -5,7 +5,11 @@ export const api = ky.create({
   hooks: {
     beforeRequest: [
       async (request) => {
-        const token = document.cookie.split('; ').find((row) => row === 'token')
+        const tokenValue = document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('token='))
+
+        const token = tokenValue ? tokenValue.split('=')[1] : undefined
 
         if (token) {
           request.headers.set('Authorization', `Bearer ${token}`)
