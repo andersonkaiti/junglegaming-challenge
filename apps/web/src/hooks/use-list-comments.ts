@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 
 export function useListComments(taskId: string) {
   const [page] = useQueryState('page', parseAsInteger.withDefault(1))
-  const [size] = useQueryState('size', parseAsInteger.withDefault(6))
+  const [size] = useQueryState('size', parseAsInteger.withDefault(5))
   const [filter] = useQueryState('filter', parseAsString.withDefault(''))
 
   const { refetch, data, ...rest } = useQuery({
