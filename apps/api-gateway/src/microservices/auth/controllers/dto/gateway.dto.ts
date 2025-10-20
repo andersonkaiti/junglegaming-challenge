@@ -5,5 +5,5 @@ export class GatewayDTO {
   key: string
 
   @IsObject()
-  data: unknown
+  data?: unknown
 }

@@ -142,12 +142,12 @@ Tarefas e Comentários (API Gateway + Tasks Service)
 Notificações & Tempo Real (Notifications Service)
 
 - [x] Estrutura básica do serviço (controller + service)
-- [ ] Consumir eventos do RabbitMQ (criação, atualização, comentário)
+- [x] Consumir eventos do RabbitMQ (criação, atualização, comentário)
 - [ ] Persistir notificações por usuário
-- [ ] WebSocket: canal por usuário e broadcast contextual
-- [ ] Eventos: `task:created`, `task:updated`, `comment:new`
+- [x] WebSocket: broadcast básico implementado
+- [x] Eventos: `task:created`, `task:updated`, `comment:new`
 
-Frontend (fora do escopo desta entrega, mas planejado)
+Frontend
 
 - [ ] Páginas: Login/Register, Lista de Tarefas, Detalhe (com comentários)
 - [ ] Estado de auth (Context/Zustand), validação (`react-hook-form` + `zod`)
@@ -165,13 +165,16 @@ Infra/DevX
 Status atual do repositório
 
 - [x] Monorepo organizado com `apps/` e `packages/`
-- [x] Esqueleto de serviços (`api-gateway`, `auth-service`, `tasks-service`, `notifications-service`)
-- [x] Integração base com RabbitMQ (package compartilhado)
+- [x] Serviços completos (`api-gateway`, `auth-service`, `tasks-service`, `notifications-service`)
+- [x] Integração completa com RabbitMQ (package compartilhado)
 - [x] Implementação completa de DTOs/Guards (JWT Auth)
 - [x] Implementação completa dos endpoints de autenticação e tarefas
-- [ ] Swagger/OpenAPI documentation
+- [x] CRUD completo de tarefas e comentários
+- [x] WebSocket básico para notificações em tempo real
 - [x] Rate limiting no Gateway
-- [ ] Notifications Service completo (WebSocket + eventos)
+- [ ] Swagger/OpenAPI documentation
+- [ ] Persistência de notificações por usuário
+- [ ] Audit log de alterações
 
 ---
 
@@ -206,8 +209,10 @@ Comentários
 
 ### Problemas conhecidos
 
-- Falta a implementação total do Swagger, guards, DTOs completos e alguns endpoints.
+- Falta a implementação do Swagger/OpenAPI documentation.
+- Persistência de notificações por usuário não implementada.
 - Frontend não incluso por enquanto.
+- Audit log de alterações não implementado.
 
 ---
 

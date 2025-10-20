@@ -7,7 +7,7 @@ import { GatewayDTO } from './controllers/dto/gateway.dto'
 export class GatewayService {
   constructor(@Inject('AUTH') private readonly rabbitMQClient: ClientProxy) {}
 
-  emitEvent(@Body() { key, data }: GatewayDTO) {
+  emitEvent(@Body() { key, data = {} }: GatewayDTO) {
     return firstValueFrom(this.rabbitMQClient.send(key, data))
   }
 }

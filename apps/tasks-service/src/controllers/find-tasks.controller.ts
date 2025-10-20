@@ -5,20 +5,36 @@ import { Repository } from 'typeorm'
 import Task from '../database/entities/task.entity'
 import { FindTasksDTO } from './dto/find-tasks.dto'
 
+const DEFAULT_PAGE = 1
+const DEFAULT_SIZE = 10
+
 @Controller()
 export class FindTasksController {
   constructor(
-    @InjectRepository(Task) private readonly taskRepository: Repository<Task>
+    @InjectRepository(Task)
+    private readonly taskRepository: Repository<Task>
   ) {}
 
   @MessagePattern('tasks')
-  async findTasks(@Body() { page, size = 10 }: FindTasksDTO) {
+  async findTasks(@Body() { page, size }: FindTasksDTO) {
     try {
-      return await this.taskRepository.find({
+      const safePage = page || DEFAULT_PAGE
+      const safeSize = size || DEFAULT_SIZE
+
+      const tasks = await this.taskRepository.find({
         relations: ['taskUsers'],
-        take: size,
-        skip: page * size - size,
+        take: safeSize,
+        skip: safePage * safeSize - safeSize,
       })
+
+      const countTasks = await this.taskRepository.count()
+
+      return {
+        page: safePage,
+        size: safeSize,
+        total: Math.max(Math.ceil(countTasks / safeSize), 1),
+        tasks,
+      }
     } catch (err) {
       throw new RpcException({
         message: err.message,
