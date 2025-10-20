@@ -18,48 +18,20 @@ import {
 import { Textarea } from '@components/ui/textarea'
 import { useCreateComment } from '@hooks/use-create-comment'
 import { listUsers } from '@http/users/list-users'
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useLoaderData,
-} from '@tanstack/react-router'
-import { HTTPError } from 'ky'
-
-const STATUS_CODE_UNAUTHORIZED = 401
+import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard/tasks/comments/new/$taskId')({
   component: CreateComment,
-  loader: async ({ params: { taskId } }) => {
-    try {
-      return {
-        taskId,
-        users: await listUsers(),
-      }
-    } catch (err) {
-      if (err instanceof HTTPError) {
-        const errorBody = await err.response.json()
-
-        if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-          document.cookie =
-            'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-
-          throw redirect({
-            to: '/auth/sign-in',
-          })
-        }
-      }
-    }
-  },
+  loader: async ({ params: { taskId } }) => ({
+    taskId,
+    users: await listUsers(),
+  }),
 })
 
 function CreateComment() {
-  const data = useLoaderData({
+  const { taskId, users } = useLoaderData({
     from: '/dashboard/tasks/comments/new/$taskId',
   })
-
-  const users = data?.users || []
-  const taskId = data?.taskId || ''
 
   const { form, serverError, submit } = useCreateComment(taskId)
 

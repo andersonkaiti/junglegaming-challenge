@@ -8,7 +8,7 @@ export function LoadingSkeleton() {
           <div className="flex">
             {Array.from({ length: 6 }).map((_, idx) => (
               <div key={idx} className="flex-1 px-4 py-2">
-                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-6 w-full" />
               </div>
             ))}
           </div>
@@ -20,7 +20,7 @@ export function LoadingSkeleton() {
             >
               {Array.from({ length: 6 }).map((_, colIdx) => (
                 <div key={colIdx} className="h-12.5 flex-1 px-4 py-3">
-                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-full" />
                 </div>
               ))}
             </div>
