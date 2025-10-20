@@ -1,13 +1,8 @@
+import type { ITask } from '@http/tasks/find-tasks'
 import { cn } from '@lib/utils'
 import type { ColumnDef } from '@tanstack/react-table'
 import { isAfter } from 'date-fns'
 import { ActionsRow } from './actions-row'
-
-interface ITaskUser {
-  id: string
-  taskId: string
-  userId: string
-}
 
 export enum Priority {
   LOW = 'LOW',
@@ -75,19 +70,7 @@ export const StatusMapping: Record<
   },
 }
 
-interface ITasks {
-  id: string
-  title: string
-  description: string
-  dueDate: Date
-  priority: Priority
-  status: Status
-  createdAt: Date
-  updatedAt: Date
-  taskUsers: ITaskUser[]
-}
-
-export const tasksColumns: ColumnDef<ITasks>[] = [
+export const tasksColumns: ColumnDef<ITask>[] = [
   {
     id: 'title',
     header: 'Título',
