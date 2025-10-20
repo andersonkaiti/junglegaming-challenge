@@ -7,6 +7,7 @@ import { ListUsersController } from './controllers/list-users.controller'
 import { LoginController } from './controllers/login.controller'
 import { RefreshController } from './controllers/refresh.controller'
 import { RegisterController } from './controllers/register.controller'
+import { UpdateAuthenticatedUserController } from './controllers/update-authenticated-user.controller'
 import { GatewayService } from './gateway.service'
 
 @Module({
@@ -30,6 +31,7 @@ import { GatewayService } from './gateway.service'
     RefreshController,
     ListUsersController,
     GetAuthenticatedUserController,
+    UpdateAuthenticatedUserController,
   ],
   providers: [GatewayService],
 })

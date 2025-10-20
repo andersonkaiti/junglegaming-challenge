@@ -6,6 +6,7 @@ import { ListUsersController } from './controllers/list-users.controller'
 import { LoginController } from './controllers/login.controller'
 import { RefreshTokenController } from './controllers/refresh-token.controller'
 import { RegisterController } from './controllers/register.controller'
+import { UpdateAuthenticatedUserController } from './controllers/update-authenticated-user.controller'
 import { DatabaseModule } from './database/database.module'
 import { envSchema } from './env.schema'
 import { RabbitMQModuleWrapper } from './rabbitmq/rabbitmq.module'
@@ -26,6 +27,7 @@ import { RabbitMQModuleWrapper } from './rabbitmq/rabbitmq.module'
     RefreshTokenController,
     ListUsersController,
     GetAuthenticatedUserController,
+    UpdateAuthenticatedUserController,
   ],
 })
 export class AuthModule {}

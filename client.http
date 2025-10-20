@@ -114,3 +114,14 @@ Authorization: Bearer {{refreshedToken}}
 # @name get_authenticated_user
 GET {{baseUrl}}/api/auth/user
 Authorization: Bearer {{refreshedToken}}
+
+###
+
+# @name update_authenticated_user
+PUT {{baseUrl}}/api/auth/user
+Content-Type: application/json
+Authorization: Bearer {{refreshedToken}}
+
+{
+  "username": "Anderson Kaiti"
+}
