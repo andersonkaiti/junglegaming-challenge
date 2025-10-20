@@ -6,8 +6,6 @@ import { RmqOptions } from '@nestjs/microservices'
 import { Env } from './env.schema'
 import { NotificationsModule } from './notifications.module'
 
-const WEBSOCKET_PORT = 4000
-
 async function bootstrap() {
   const app = await NestFactory.create(NotificationsModule)
 
@@ -34,11 +32,11 @@ async function bootstrap() {
 
   await app.startAllMicroservices()
 
-  await app.listen(WEBSOCKET_PORT)
+  const PORT = configService.get('PORT', { infer: true })
 
-  console.log(
-    `🚀 Notification service WebSocket listening on port ${WEBSOCKET_PORT}`
-  )
+  await app.listen(PORT)
+
+  console.log(`🚀 Notification service WebSocket listening on port ${PORT}`)
 }
 
 bootstrap()
