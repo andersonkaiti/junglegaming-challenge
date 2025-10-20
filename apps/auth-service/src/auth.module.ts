@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { JwtModuleWrapper } from './auth/jwt.module'
+import { GetAuthenticatedUserController } from './controllers/get-authenticated-user.controller'
 import { ListUsersController } from './controllers/list-users.controller'
 import { LoginController } from './controllers/login.controller'
 import { RefreshTokenController } from './controllers/refresh-token.controller'
@@ -24,6 +25,7 @@ import { RabbitMQModuleWrapper } from './rabbitmq/rabbitmq.module'
     LoginController,
     RefreshTokenController,
     ListUsersController,
+    GetAuthenticatedUserController,
   ],
 })
 export class AuthModule {}

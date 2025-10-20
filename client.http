@@ -108,3 +108,9 @@ Authorization: Bearer {{refreshedToken}}
 # @name find_users
 GET {{baseUrl}}/api/auth/users
 Authorization: Bearer {{refreshedToken}}
+
+###
+
+# @name get_authenticated_user
+GET {{baseUrl}}/api/auth/user
+Authorization: Bearer {{refreshedToken}}
