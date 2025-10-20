@@ -10,7 +10,7 @@ export const Route = createFileRoute('/dashboard/tasks/')({
 function Dashboard() {
   return (
     <div className="flex h-full flex-col gap-8 p-5">
-      <header className="flex justify-between gap-4">
+      <header className="flex flex-col justify-between gap-4 md:flex-row">
         <h1 className="text-3xl font-bold">Tarefas</h1>
 
         <Button asChild>

@@ -16,18 +16,31 @@ export class ListCommentsController {
   ) {}
 
   @MessagePattern('task.comments')
-  listComments(@Body() { id, page, size }: ListCommentsDTO) {
+  async listComments(@Body() { id, page, size }: ListCommentsDTO) {
     try {
       const safePage = page || DEFAULT_PAGE
       const safeSize = size || DEFAULT_SIZE
 
-      return this.commentRepository.find({
+      const comments = await this.commentRepository.find({
         where: {
           taskId: id,
         },
         take: safeSize,
         skip: safePage * safeSize - safeSize,
       })
+
+      const countComments = await this.commentRepository.count({
+        where: {
+          taskId: id,
+        },
+      })
+
+      return {
+        page: safePage,
+        size: safeSize,
+        total: Math.max(Math.ceil(countComments / safeSize), 1),
+        comments,
+      }
     } catch (err) {
       throw new RpcException({
         message: err.message,

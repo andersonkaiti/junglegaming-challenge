@@ -16,6 +16,8 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as DashboardTasksIndexRouteImport } from './routes/dashboard/tasks/index'
 import { Route as DashboardTasksNewIndexRouteImport } from './routes/dashboard/tasks/new/index'
 import { Route as DashboardTasksEditTaskIdRouteImport } from './routes/dashboard/tasks/edit/$taskId'
+import { Route as DashboardTasksCommentsTaskIdRouteImport } from './routes/dashboard/tasks/comments/$taskId'
+import { Route as DashboardTasksCommentsNewTaskIdRouteImport } from './routes/dashboard/tasks/comments/new/$taskId'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -53,6 +55,18 @@ const DashboardTasksEditTaskIdRoute =
     path: '/tasks/edit/$taskId',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardTasksCommentsTaskIdRoute =
+  DashboardTasksCommentsTaskIdRouteImport.update({
+    id: '/tasks/comments/$taskId',
+    path: '/tasks/comments/$taskId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardTasksCommentsNewTaskIdRoute =
+  DashboardTasksCommentsNewTaskIdRouteImport.update({
+    id: '/tasks/comments/new/$taskId',
+    path: '/tasks/comments/new/$taskId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,8 +74,10 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/tasks': typeof DashboardTasksIndexRoute
+  '/dashboard/tasks/comments/$taskId': typeof DashboardTasksCommentsTaskIdRoute
   '/dashboard/tasks/edit/$taskId': typeof DashboardTasksEditTaskIdRoute
   '/dashboard/tasks/new': typeof DashboardTasksNewIndexRoute
+  '/dashboard/tasks/comments/new/$taskId': typeof DashboardTasksCommentsNewTaskIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,8 +85,10 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/tasks': typeof DashboardTasksIndexRoute
+  '/dashboard/tasks/comments/$taskId': typeof DashboardTasksCommentsTaskIdRoute
   '/dashboard/tasks/edit/$taskId': typeof DashboardTasksEditTaskIdRoute
   '/dashboard/tasks/new': typeof DashboardTasksNewIndexRoute
+  '/dashboard/tasks/comments/new/$taskId': typeof DashboardTasksCommentsNewTaskIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,8 +97,10 @@ export interface FileRoutesById {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/dashboard/tasks/': typeof DashboardTasksIndexRoute
+  '/dashboard/tasks/comments/$taskId': typeof DashboardTasksCommentsTaskIdRoute
   '/dashboard/tasks/edit/$taskId': typeof DashboardTasksEditTaskIdRoute
   '/dashboard/tasks/new/': typeof DashboardTasksNewIndexRoute
+  '/dashboard/tasks/comments/new/$taskId': typeof DashboardTasksCommentsNewTaskIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,8 +110,10 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/dashboard/tasks'
+    | '/dashboard/tasks/comments/$taskId'
     | '/dashboard/tasks/edit/$taskId'
     | '/dashboard/tasks/new'
+    | '/dashboard/tasks/comments/new/$taskId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,8 +121,10 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/dashboard/tasks'
+    | '/dashboard/tasks/comments/$taskId'
     | '/dashboard/tasks/edit/$taskId'
     | '/dashboard/tasks/new'
+    | '/dashboard/tasks/comments/new/$taskId'
   id:
     | '__root__'
     | '/'
@@ -108,8 +132,10 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/dashboard/tasks/'
+    | '/dashboard/tasks/comments/$taskId'
     | '/dashboard/tasks/edit/$taskId'
     | '/dashboard/tasks/new/'
+    | '/dashboard/tasks/comments/new/$taskId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -170,19 +196,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTasksEditTaskIdRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/tasks/comments/$taskId': {
+      id: '/dashboard/tasks/comments/$taskId'
+      path: '/tasks/comments/$taskId'
+      fullPath: '/dashboard/tasks/comments/$taskId'
+      preLoaderRoute: typeof DashboardTasksCommentsTaskIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/tasks/comments/new/$taskId': {
+      id: '/dashboard/tasks/comments/new/$taskId'
+      path: '/tasks/comments/new/$taskId'
+      fullPath: '/dashboard/tasks/comments/new/$taskId'
+      preLoaderRoute: typeof DashboardTasksCommentsNewTaskIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
 interface DashboardRouteRouteChildren {
   DashboardTasksIndexRoute: typeof DashboardTasksIndexRoute
+  DashboardTasksCommentsTaskIdRoute: typeof DashboardTasksCommentsTaskIdRoute
   DashboardTasksEditTaskIdRoute: typeof DashboardTasksEditTaskIdRoute
   DashboardTasksNewIndexRoute: typeof DashboardTasksNewIndexRoute
+  DashboardTasksCommentsNewTaskIdRoute: typeof DashboardTasksCommentsNewTaskIdRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardTasksIndexRoute: DashboardTasksIndexRoute,
+  DashboardTasksCommentsTaskIdRoute: DashboardTasksCommentsTaskIdRoute,
   DashboardTasksEditTaskIdRoute: DashboardTasksEditTaskIdRoute,
   DashboardTasksNewIndexRoute: DashboardTasksNewIndexRoute,
+  DashboardTasksCommentsNewTaskIdRoute: DashboardTasksCommentsNewTaskIdRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
