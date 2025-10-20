@@ -1,3 +1,4 @@
+import { FilterInput } from '@components/dashboard/tasks/filter-input'
 import { TasksTable } from '@components/dashboard/tasks/table/table'
 import { Button } from '@components/ui/button'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -20,6 +21,8 @@ function Dashboard() {
           </Link>
         </Button>
       </header>
+
+      <FilterInput />
 
       <TasksTable />
     </div>

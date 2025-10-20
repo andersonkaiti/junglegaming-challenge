@@ -16,13 +16,18 @@ export class FindTasksController {
   constructor(private readonly gatewayService: GatewayService) {}
 
   @Get()
-  async findTasks(@Query('page') page?: string, @Query('size') size?: string) {
+  async findTasks(
+    @Query('page') page?: string,
+    @Query('size') size?: string,
+    @Query('filter') filter?: string
+  ) {
     try {
       return await this.gatewayService.emitEvent({
         key: 'tasks',
         data: {
           page: Number(page),
           size: Number(size),
+          filter,
         },
       })
     } catch (err) {

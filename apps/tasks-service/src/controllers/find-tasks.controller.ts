@@ -1,7 +1,7 @@
 import { Body, Controller } from '@nestjs/common'
 import { MessagePattern, RpcException } from '@nestjs/microservices'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import Task from '../database/entities/task.entity'
 import { FindTasksDTO } from './dto/find-tasks.dto'
 
@@ -16,7 +16,7 @@ export class FindTasksController {
   ) {}
 
   @MessagePattern('tasks')
-  async findTasks(@Body() { page, size }: FindTasksDTO) {
+  async findTasks(@Body() { page, size, filter = '' }: FindTasksDTO) {
     try {
       const safePage = page || DEFAULT_PAGE
       const safeSize = size || DEFAULT_SIZE
@@ -25,9 +25,18 @@ export class FindTasksController {
         relations: ['taskUsers'],
         take: safeSize,
         skip: safePage * safeSize - safeSize,
+        where: {
+          title: Like(`%${filter}%`),
+          description: Like(`%${filter}%`),
+        },
       })
 
-      const countTasks = await this.taskRepository.count()
+      const countTasks = await this.taskRepository.count({
+        where: {
+          title: Like(`%${filter}%`),
+          description: Like(`%${filter}%`),
+        },
+      })
 
       return {
         page: safePage,

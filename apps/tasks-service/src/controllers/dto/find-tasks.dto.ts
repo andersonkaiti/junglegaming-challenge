@@ -1,4 +1,4 @@
-import { IsNumber, Min } from 'class-validator'
+import { IsNumber, IsString, Min } from 'class-validator'
 
 export class FindTasksDTO {
   @IsNumber()
@@ -8,4 +8,7 @@ export class FindTasksDTO {
   @IsNumber()
   @Min(1)
   size: number
+
+  @IsString()
+  filter?: string
 }
