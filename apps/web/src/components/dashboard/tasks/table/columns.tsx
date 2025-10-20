@@ -1,14 +1,5 @@
-import { Button } from '@components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@components/ui/dropdown-menu'
-import { Link } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { Edit2, EllipsisVertical, Eye } from 'lucide-react'
+import { ActionsRow } from './actions-row'
 
 interface ITaskUser {
   id: string
@@ -75,37 +66,6 @@ export const tasksColumns: ColumnDef<ITasks>[] = [
       row: {
         original: { id: taskId },
       },
-    }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <EllipsisVertical />
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent>
-          <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Button variant="ghost" asChild className="w-full">
-                <Link
-                  to="/dashboard/tasks/edit/$taskId"
-                  params={{
-                    taskId,
-                  }}
-                >
-                  <Edit2 /> <span className="mr-auto ml-2">Editar</span>
-                </Link>
-              </Button>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem asChild>
-              <Button variant="ghost" className="w-full">
-                <Eye /> <span className="ml-2">Visualizar comentários</span>
-              </Button>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    }) => <ActionsRow taskId={taskId} />,
   },
 ]
