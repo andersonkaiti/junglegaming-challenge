@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core'
 import { ThrottlerGuard } from '@nestjs/throttler'
 import { Env } from './env.schema'
 import { GatewayModule } from './gateway.module'
+import initSwagger from './swagger'
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule)
@@ -23,6 +24,8 @@ async function bootstrap() {
   )
 
   app.useGlobalGuards(app.get(ThrottlerGuard))
+
+  initSwagger(app)
 
   const configService = app.get<ConfigService<Env, true>>(ConfigService)
 
