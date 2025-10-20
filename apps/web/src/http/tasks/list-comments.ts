@@ -11,6 +11,13 @@ export interface IComment {
   updatedAt: string
 }
 
+interface IListCommentRequest {
+  taskId: string
+  page: number
+  size: number
+  filter?: string
+}
+
 export interface IListCommentsResponse {
   page: number
   size: number
@@ -20,14 +27,20 @@ export interface IListCommentsResponse {
 
 const STATUS_CODE_UNAUTHORIZED = 401
 
-export async function listComments(
-  taskId: string,
-  { page, size }: { page: number; size: number }
-): Promise<IListCommentsResponse> {
+export async function listComments({
+  taskId,
+  page,
+  size,
+  filter,
+}: IListCommentRequest): Promise<IListCommentsResponse> {
   const searchParams = new URLSearchParams()
 
   searchParams.append('page', String(page))
   searchParams.append('size', String(size))
+
+  if (filter) {
+    searchParams.append('filter', filter)
+  }
 
   try {
     return await api.get(`tasks/${taskId}/comments?${searchParams}`).json()

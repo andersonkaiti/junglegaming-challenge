@@ -1,4 +1,4 @@
-import { IsNumber, IsUUID, Min } from 'class-validator'
+import { IsNumber, IsString, IsUUID, Min } from 'class-validator'
 
 export class ListCommentsDTO {
   @IsUUID()
@@ -11,4 +11,7 @@ export class ListCommentsDTO {
   @IsNumber()
   @Min(1)
   size: number
+
+  @IsString()
+  filter?: string
 }

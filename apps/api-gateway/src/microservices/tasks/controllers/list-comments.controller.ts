@@ -20,7 +20,8 @@ export class ListCommentsController {
   async listComments(
     @Param('id') id: string,
     @Query('page') page?: string,
-    @Query('size') size?: string
+    @Query('size') size?: string,
+    @Query('filter') filter?: string
   ) {
     try {
       return await this.gatewayService.emitEvent({
@@ -29,6 +30,7 @@ export class ListCommentsController {
           id,
           page: Number(page),
           size: Number(size),
+          filter,
         },
       })
     } catch (err) {
