@@ -124,7 +124,7 @@ Autenticação (API Gateway + Auth Service)
 - [x] `POST /api/auth/refresh` — renovar `accessToken`
 - [x] Guard JWT no Gateway protegendo rotas `/api/tasks*`
 - [x] Rate limiting no Gateway (10 req/s)
-- [ ] Swagger com esquemas (DTOs) e exemplos
+- [x] Swagger com esquemas (DTOs) e exemplos
 
 Tarefas e Comentários (API Gateway + Tasks Service)
 
@@ -149,11 +149,11 @@ Notificações & Tempo Real (Notifications Service)
 
 Frontend
 
-- [ ] Páginas: Login/Register, Lista de Tarefas, Detalhe (com comentários)
-- [ ] Estado de auth (Context/Zustand), validação (`react-hook-form` + `zod`)
-- [ ] UI com shadcn/ui + Tailwind (≥5 componentes)
-- [ ] WebSocket para notificações em tempo real
-- [ ] Loading/Error states (skeleton + toasts)
+- [x] Páginas: Login/Register, Lista de Tarefas, Detalhe (com comentários)
+- [x] Estado de auth (Context/Zustand), validação (`react-hook-form` + `zod`)
+- [x] UI com shadcn/ui + Tailwind (≥5 componentes)
+- [x] WebSocket para notificações em tempo real
+- [x] Loading/Error states (skeleton + toasts)
 
 Infra/DevX
 
@@ -172,7 +172,7 @@ Status atual do repositório
 - [x] CRUD completo de tarefas e comentários
 - [x] WebSocket básico para notificações em tempo real
 - [x] Rate limiting no Gateway
-- [ ] Swagger/OpenAPI documentation
+- [x] Swagger/OpenAPI documentation
 - [ ] Persistência de notificações por usuário
 - [ ] Audit log de alterações
 
