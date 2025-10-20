@@ -2,10 +2,12 @@ import { RabbitMQModule } from '@junglegaming-challenge/rabbitmq'
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Env } from '../../env.schema'
+import { GetAuthenticatedUserController } from './controllers/get-authenticated-user.controller'
 import { ListUsersController } from './controllers/list-users.controller'
 import { LoginController } from './controllers/login.controller'
 import { RefreshController } from './controllers/refresh.controller'
 import { RegisterController } from './controllers/register.controller'
+import { UpdateAuthenticatedUserController } from './controllers/update-authenticated-user.controller'
 import { GatewayService } from './gateway.service'
 
 @Module({
@@ -28,6 +30,8 @@ import { GatewayService } from './gateway.service'
     LoginController,
     RefreshController,
     ListUsersController,
+    GetAuthenticatedUserController,
+    UpdateAuthenticatedUserController,
   ],
   providers: [GatewayService],
 })

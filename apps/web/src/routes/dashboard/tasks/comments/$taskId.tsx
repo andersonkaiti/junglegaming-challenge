@@ -1,13 +1,8 @@
+import { Comment } from '@components/dashboard/tasks/comments/comment'
 import { LoadingSkeleton } from '@components/dashboard/tasks/comments/loading-skeleton'
+import { FilterInput } from '@components/dashboard/tasks/filter-input'
 import Paginator from '@components/dashboard/tasks/paginator'
 import { Button } from '@components/ui/button'
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemFooter,
-  ItemTitle,
-} from '@components/ui/item'
 import { useListComments } from '@hooks/use-list-comments'
 import { listUsers } from '@http/users/list-users'
 import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router'
@@ -28,12 +23,6 @@ function Comments() {
 
   const { paginatedComments, page, isLoading } = useListComments(taskId)
 
-  function getUserDisplay(userId: string) {
-    const user = users?.find((user) => user?.id === userId)
-
-    return `${user?.username} (${user?.email})`
-  }
-
   return (
     <div className="flex h-full flex-col justify-between gap-4 p-5">
       <header className="flex flex-col justify-between gap-4 md:flex-row">
@@ -52,6 +41,8 @@ function Comments() {
         </Button>
       </header>
 
+      <FilterInput />
+
       <div className="flex h-full flex-col gap-4">
         {isLoading && <LoadingSkeleton />}
 
@@ -63,27 +54,7 @@ function Comments() {
 
         {!isLoading &&
           paginatedComments?.comments?.map((comment) => (
-            <Item key={comment.id}>
-              <ItemTitle className="text-lg">{comment.text}</ItemTitle>
-
-              <ItemFooter>
-                <ItemDescription>
-                  Para: {getUserDisplay(comment.userId)}
-                </ItemDescription>
-
-                <ItemContent className="text-xs">
-                  {' '}
-                  Criado em{' '}
-                  {new Date(comment.createdAt).toLocaleDateString('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </ItemContent>
-              </ItemFooter>
-            </Item>
+            <Comment users={users} comment={comment} />
           ))}
       </div>
 

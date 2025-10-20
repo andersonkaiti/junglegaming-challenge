@@ -13,7 +13,7 @@ export function LoadingSkeleton() {
             ))}
           </div>
 
-          {Array.from({ length: 13 }).map((_, rowIdx) => (
+          {Array.from({ length: 11 }).map((_, rowIdx) => (
             <div
               key={rowIdx}
               className="border-muted-foreground/10 flex border-t"

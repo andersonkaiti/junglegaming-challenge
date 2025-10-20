@@ -1,7 +1,7 @@
 import { Body, Controller } from '@nestjs/common'
 import { MessagePattern, RpcException } from '@nestjs/microservices'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import Comment from '../database/entities/comment.entity'
 import { ListCommentsDTO } from './dto/list-comments.dto'
 
@@ -16,7 +16,7 @@ export class ListCommentsController {
   ) {}
 
   @MessagePattern('task.comments')
-  async listComments(@Body() { id, page, size }: ListCommentsDTO) {
+  async listComments(@Body() { id, page, size, filter = '' }: ListCommentsDTO) {
     try {
       const safePage = page || DEFAULT_PAGE
       const safeSize = size || DEFAULT_SIZE
@@ -24,6 +24,7 @@ export class ListCommentsController {
       const comments = await this.commentRepository.find({
         where: {
           taskId: id,
+          text: Like(`%${filter}%`),
         },
         take: safeSize,
         skip: safePage * safeSize - safeSize,
@@ -32,6 +33,7 @@ export class ListCommentsController {
       const countComments = await this.commentRepository.count({
         where: {
           taskId: id,
+          text: Like(`%${filter}%`),
         },
       })
 

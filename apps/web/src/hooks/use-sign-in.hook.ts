@@ -4,6 +4,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 const MIN_PASSWORD_LENGTH = 6
@@ -37,6 +38,8 @@ export function useSignIn() {
 
       if (token) {
         document.cookie = `token=${token.token}; path=/`
+
+        toast.success('Logado com sucesso!')
 
         navigate({
           to: '/dashboard/tasks',
