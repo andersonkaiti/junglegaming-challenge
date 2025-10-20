@@ -1,3 +1,4 @@
+import { LoadingSkeleton } from '@components/dashboard/tasks/edit-task/loading-skeleton'
 import { Button } from '@components/ui/button'
 import { DatePicker } from '@components/ui/date-picker'
 import {
@@ -26,9 +27,6 @@ import {
   redirect,
   useLoaderData,
 } from '@tanstack/react-router'
-import { HTTPError } from 'ky'
-
-const STATUS_CODE_UNAUTHORIZED = 401
 
 export const Route = createFileRoute('/dashboard/tasks/edit/$taskId')({
   loader: async ({ params: { taskId } }) => {
@@ -36,33 +34,15 @@ export const Route = createFileRoute('/dashboard/tasks/edit/$taskId')({
       throw redirect({ to: '/dashboard/tasks' })
     }
 
-    try {
-      const [task, users] = await Promise.all([
-        getTaskById(taskId),
-        listUsers(),
-      ])
+    const [task, users] = await Promise.all([getTaskById(taskId), listUsers()])
 
-      return {
-        task,
-        users,
-      }
-    } catch (err) {
-      if (err instanceof HTTPError) {
-        const errorBody = await err.response.json()
-
-        if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-          document.cookie =
-            'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-
-          throw redirect({
-            to: '/auth/sign-in',
-          })
-        }
-      }
-      throw err
+    return {
+      task,
+      users,
     }
   },
   component: EditTask,
+  pendingComponent: () => <LoadingSkeleton />,
 })
 
 function EditTask() {
