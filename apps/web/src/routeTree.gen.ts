@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as DashboardTasksIndexRouteImport } from './routes/dashboard/tasks/index'
+import { Route as DashboardSettingsIndexRouteImport } from './routes/dashboard/settings/index'
 import { Route as DashboardTasksNewIndexRouteImport } from './routes/dashboard/tasks/new/index'
 import { Route as DashboardTasksEditTaskIdRouteImport } from './routes/dashboard/tasks/edit/$taskId'
 import { Route as DashboardTasksCommentsTaskIdRouteImport } from './routes/dashboard/tasks/comments/$taskId'
@@ -42,6 +43,11 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
 const DashboardTasksIndexRoute = DashboardTasksIndexRouteImport.update({
   id: '/tasks/',
   path: '/tasks/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsIndexRoute = DashboardSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardTasksNewIndexRoute = DashboardTasksNewIndexRouteImport.update({
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/settings': typeof DashboardSettingsIndexRoute
   '/dashboard/tasks': typeof DashboardTasksIndexRoute
   '/dashboard/tasks/comments/$taskId': typeof DashboardTasksCommentsTaskIdRoute
   '/dashboard/tasks/edit/$taskId': typeof DashboardTasksEditTaskIdRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/settings': typeof DashboardSettingsIndexRoute
   '/dashboard/tasks': typeof DashboardTasksIndexRoute
   '/dashboard/tasks/comments/$taskId': typeof DashboardTasksCommentsTaskIdRoute
   '/dashboard/tasks/edit/$taskId': typeof DashboardTasksEditTaskIdRoute
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/settings/': typeof DashboardSettingsIndexRoute
   '/dashboard/tasks/': typeof DashboardTasksIndexRoute
   '/dashboard/tasks/comments/$taskId': typeof DashboardTasksCommentsTaskIdRoute
   '/dashboard/tasks/edit/$taskId': typeof DashboardTasksEditTaskIdRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/settings'
     | '/dashboard/tasks'
     | '/dashboard/tasks/comments/$taskId'
     | '/dashboard/tasks/edit/$taskId'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/settings'
     | '/dashboard/tasks'
     | '/dashboard/tasks/comments/$taskId'
     | '/dashboard/tasks/edit/$taskId'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/settings/'
     | '/dashboard/tasks/'
     | '/dashboard/tasks/comments/$taskId'
     | '/dashboard/tasks/edit/$taskId'
@@ -182,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTasksIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/settings/': {
+      id: '/dashboard/settings/'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/tasks/new/': {
       id: '/dashboard/tasks/new/'
       path: '/tasks/new'
@@ -214,6 +233,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteRouteChildren {
+  DashboardSettingsIndexRoute: typeof DashboardSettingsIndexRoute
   DashboardTasksIndexRoute: typeof DashboardTasksIndexRoute
   DashboardTasksCommentsTaskIdRoute: typeof DashboardTasksCommentsTaskIdRoute
   DashboardTasksEditTaskIdRoute: typeof DashboardTasksEditTaskIdRoute
@@ -222,6 +242,7 @@ interface DashboardRouteRouteChildren {
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardSettingsIndexRoute: DashboardSettingsIndexRoute,
   DashboardTasksIndexRoute: DashboardTasksIndexRoute,
   DashboardTasksCommentsTaskIdRoute: DashboardTasksCommentsTaskIdRoute,
   DashboardTasksEditTaskIdRoute: DashboardTasksEditTaskIdRoute,

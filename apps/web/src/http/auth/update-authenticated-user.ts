@@ -2,24 +2,27 @@ import { removeToken } from '@utils/remove-token'
 import { HTTPError } from 'ky'
 import { api } from '../api-client'
 
-export interface IUser {
-  id: string
-  username: string
-  email: string
-}
-
 const STATUS_CODE_UNAUTHORIZED = 401
 
-export async function getAuthenticatedUser(): Promise<IUser> {
+export interface IUpdateUserRequest {
+  username: string
+  password?: string
+}
+
+export async function updateAuthenticatedUser(user: IUpdateUserRequest) {
   try {
-    return await api.get(`auth/user`).json()
+    return await api.put('auth/user', {
+      json: user,
+    })
   } catch (err) {
     if (err instanceof HTTPError) {
       const errorBody = await err.response.json()
+
       if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
         removeToken()
       }
     }
+
     throw err
   }
 }
