@@ -11,12 +11,6 @@ export interface IComment {
   updatedAt: string
 }
 
-interface IListCommentsRequest {
-  page: number
-  size: number
-  taskId: string
-}
-
 export interface IListCommentsResponse {
   page: number
   size: number
