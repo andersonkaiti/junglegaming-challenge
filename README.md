@@ -207,13 +207,4 @@ Comentários
 
 ---
 
-### Problemas conhecidos
-
-- Falta a implementação do Swagger/OpenAPI documentation.
-- Persistência de notificações por usuário não implementada.
-- Frontend não incluso por enquanto.
-- Audit log de alterações não implementado.
-
----
-
 Obrigado pela avaliação! Qualquer dúvida, fico à disposição.
