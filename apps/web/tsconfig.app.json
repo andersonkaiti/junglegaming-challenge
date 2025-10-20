@@ -31,6 +31,7 @@
       "@http/*": ["./src/http/*"],
       "@lib/*": ["./src/lib/*"],
       "@providers/*": ["./src/providers/*"],
+      "@utils/*": ["./src/utils/*"],
       "@/*": ["./src/*"]
     }
   },

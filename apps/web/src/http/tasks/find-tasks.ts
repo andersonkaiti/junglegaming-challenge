@@ -1,4 +1,4 @@
-import { redirect } from '@tanstack/react-router'
+import { removeToken } from '@utils/remove-token'
 import { HTTPError } from 'ky'
 import { api } from '../api-client'
 
@@ -50,14 +50,10 @@ export async function findTasks({
       const errorBody = await err.response.json()
 
       if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-        document.cookie =
-          'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-
-        throw redirect({
-          to: '/auth/sign-in',
-        })
+        removeToken()
       }
     }
+
     throw err
   }
 }

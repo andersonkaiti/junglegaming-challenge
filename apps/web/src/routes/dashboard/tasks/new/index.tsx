@@ -19,44 +19,17 @@ import {
 import { Textarea } from '@components/ui/textarea'
 import { useCreateTask } from '@hooks/use-create-task'
 import { listUsers } from '@http/users/list-users'
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useLoaderData,
-} from '@tanstack/react-router'
-import { HTTPError } from 'ky'
-
-const STATUS_CODE_UNAUTHORIZED = 401
+import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard/tasks/new/')({
   component: CreateTask,
-  loader: async () => {
-    try {
-      return {
-        users: await listUsers(),
-      }
-    } catch (err) {
-      if (err instanceof HTTPError) {
-        const errorBody = await err.response.json()
-
-        if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-          document.cookie =
-            'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-
-          throw redirect({
-            to: '/auth/sign-in',
-          })
-        }
-      }
-    }
-  },
+  loader: async () => ({
+    users: await listUsers(),
+  }),
 })
 
 function CreateTask() {
-  const data = useLoaderData({ from: '/dashboard/tasks/new/' })
-
-  const users = data?.users || []
+  const { users } = useLoaderData({ from: '/dashboard/tasks/new/' })
 
   const { form, submit } = useCreateTask()
 
