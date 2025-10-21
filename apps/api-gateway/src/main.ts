@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(GatewayModule)
 
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'http://web:5173'],
     credentials: true,
   })
 
