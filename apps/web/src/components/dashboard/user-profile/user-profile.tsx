@@ -1,12 +1,17 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { getAuthenticatedUser } from '@http/auth/get-authenticated-user'
 import { useQuery } from '@tanstack/react-query'
+import { LoadingSkeleton } from './loading-skeleton'
 
 export function UserProfile() {
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: getAuthenticatedUser,
   })
+
+  if (isLoading) {
+    return <LoadingSkeleton />
+  }
 
   return (
     <div className="flex items-center gap-2">
