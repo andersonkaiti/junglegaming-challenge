@@ -96,12 +96,6 @@ export class CreateTasksTable1760626008929 implements MigrationInterface {
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
           },
-          {
-            columnNames: ['user_id'],
-            referencedTableName: 'users',
-            referencedColumnNames: ['id'],
-            onDelete: 'CASCADE',
-          },
         ],
       })
     )
