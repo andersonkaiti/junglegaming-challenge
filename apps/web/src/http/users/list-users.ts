@@ -1,5 +1,3 @@
-import { removeToken } from '@utils/remove-token'
-import { HTTPError } from 'ky'
 import { api } from '../api-client'
 
 interface IUser {
@@ -8,20 +6,6 @@ interface IUser {
   email: string
 }
 
-const STATUS_CODE_UNAUTHORIZED = 401
-
 export async function listUsers(): Promise<IUser[]> {
-  try {
-    return await api.get('auth/users').json()
-  } catch (err) {
-    if (err instanceof HTTPError) {
-      const errorBody = await err.response.json()
-
-      if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-        removeToken()
-      }
-    }
-
-    throw err
-  }
+  return await api.get('auth/users').json()
 }
