@@ -46,6 +46,33 @@ flowchart LR
 
 ---
 
+### Diagrama Entidade-Relacionamento (ERD)
+
+O diagrama abaixo ilustra o esquema do banco de dados do sistema de gestão de tarefas, mostrando as relações entre as entidades principais:
+
+![Diagrama Entidade-Relacionamento](.github/assets/diagrama-entidade-relacionamento.png)
+
+**Entidades principais:**
+
+- **`users`**: Armazena informações dos usuários (id, username, email, password, timestamps)
+- **`tasks`**: Gerencia as tarefas com campos como título, descrição, prazo, prioridade e status
+- **`tasks_users`**: Tabela de junção para relacionamento many-to-many entre tarefas e usuários
+- **`comments`**: Comentários associados às tarefas, vinculados ao usuário que os criou
+
+**Relacionamentos:**
+
+- Um usuário pode ter múltiplas tarefas atribuídas (via `tasks_users`)
+- Uma tarefa pode ter múltiplos usuários atribuídos (via `tasks_users`)
+- Uma tarefa pode ter múltiplos comentários
+- Um comentário pertence a uma tarefa e a um usuário específico
+
+**Enums utilizados:**
+
+- `task_priority_enum`: LOW, MEDIUM, HIGH, URGENT
+- `task_status_enum`: TODO, IN_PROGRESS, REVIEW, DONE
+
+---
+
 ### Cronograma de Desenvolvimento
 
 O desenvolvimento deste projeto foi realizado seguindo uma metodologia estruturada, com foco no aprendizado de novas tecnologias e implementação de uma arquitetura de microserviços robusta:
