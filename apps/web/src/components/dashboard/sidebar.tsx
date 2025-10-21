@@ -18,23 +18,9 @@ import {
 } from '@components/ui/sidebar'
 import { useLogOut } from '@hooks/use-log-out'
 import { Link, useRouterState } from '@tanstack/react-router'
-import { EllipsisVertical, Home, LogOut, Wrench } from 'lucide-react'
-import { UserProfile } from './user-profile'
-
-const sidebarMenuItems = [
-  {
-    label: 'Tarefas',
-    icon: <Home className="size-3.5" />,
-    to: '/dashboard/tasks',
-    testid: 'nav-tasks',
-  },
-  {
-    label: 'Configurações',
-    icon: <Wrench className="size-3.5" />,
-    to: '/dashboard/settings',
-    testid: 'nav-settings',
-  },
-]
+import { EllipsisVertical, LogOut } from 'lucide-react'
+import { sidebarMenuItems } from './sidebar-menu-items'
+import { UserProfile } from './user-profile/user-profile'
 
 export function DashboardSidebar() {
   const { logOut } = useLogOut()

@@ -1,5 +1,3 @@
-import { removeToken } from '@utils/remove-token'
-import { HTTPError } from 'ky'
 import { api } from '../api-client'
 
 export interface IComment {
@@ -42,17 +40,5 @@ export async function listComments({
     searchParams.append('filter', filter)
   }
 
-  try {
-    return await api.get(`tasks/${taskId}/comments?${searchParams}`).json()
-  } catch (err) {
-    if (err instanceof HTTPError) {
-      const errorBody = await err.response.json()
-
-      if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-        removeToken()
-      }
-    }
-
-    throw err
-  }
+  return await api.get(`tasks/${taskId}/comments?${searchParams}`).json()
 }

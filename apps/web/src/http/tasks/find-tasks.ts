@@ -1,5 +1,3 @@
-import { removeToken } from '@utils/remove-token'
-import { HTTPError } from 'ky'
 import { api } from '../api-client'
 
 interface ITaskUser {
@@ -33,8 +31,6 @@ export interface IFindTasksResponse {
   tasks: ITask[]
 }
 
-const STATUS_CODE_UNAUTHORIZED = 401
-
 export async function findTasks({
   page,
   size,
@@ -49,17 +45,5 @@ export async function findTasks({
     searchParams.append('filter', filter)
   }
 
-  try {
-    return await api.get(`tasks?${searchParams}`).json()
-  } catch (err) {
-    if (err instanceof HTTPError) {
-      const errorBody = await err.response.json()
-
-      if (errorBody.statusCode === STATUS_CODE_UNAUTHORIZED) {
-        removeToken()
-      }
-    }
-
-    throw err
-  }
+  return await api.get(`tasks?${searchParams}`).json()
 }
