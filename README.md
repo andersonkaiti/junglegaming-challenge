@@ -46,6 +46,42 @@ flowchart LR
 
 ---
 
+### Cronograma de Desenvolvimento
+
+O desenvolvimento deste projeto foi realizado seguindo uma metodologia estruturada, com foco no aprendizado de novas tecnologias e implementação de uma arquitetura de microserviços robusta:
+
+#### Fase 1: Estudo e Preparação (1 semana)
+
+- **NestJS e TypeORM**: Aprendizado completo do framework NestJS e integração com TypeORM para ORM
+- **Fundamentos**: Estudo de arquitetura de microserviços, padrões de comunicação e boas práticas
+
+#### Fase 2: Desenvolvimento Paralelo (7 dias)
+
+**Configuração da Infraestrutura (4 dias)**
+
+- **RabbitMQ** (2 dias): Configuração e integração do message broker para comunicação assíncrona
+- **TypeORM** (2 dias): Setup de migrations, entidades e configuração de banco de dados
+
+**Implementação do Backend (3 dias)**
+
+- **Desenvolvimento de APIs**: Implementação completa de todas as rotas e endpoints
+- **Integração de Serviços**: Comunicação entre microserviços via RPC e eventos
+- **Autenticação e Autorização**: Sistema JWT centralizado com guards e middleware
+
+_Nota: A configuração da infraestrutura ocorreu em paralelo ao desenvolvimento das rotas._
+
+#### Fase 3: Desenvolvimento do Frontend (2 dias)
+
+- **Interface de Usuário**: Implementação completa da aplicação React com TanStack Router
+- **Integração em Tempo Real**: WebSocket para notificações e atualizações dinâmicas
+- **Adaptação Backend**: Ajustes contínuos no backend durante o desenvolvimento do frontend
+
+#### Total: **2 semanas** de desenvolvimento intensivo
+
+_Tempo total de trabalho: 1 semana (estudo) + 7 dias (desenvolvimento paralelo) + 2 dias (frontend) = 2 semanas_
+
+---
+
 ### Decisões técnicas
 
 - **Nest.js + TypeORM (PostgreSQL)**: padroniza repositórios, migrations e entidades.
@@ -70,8 +106,6 @@ Pré‑requisitos: Docker e Docker Compose, Node 20+, pnpm.
    - Swagger: `http://localhost:3001/api/docs` (quando habilitado)
    - RabbitMQ UI: `http://localhost:15672` (admin/admin)
    - Postgres: `localhost:5432` (postgres/password)
-
-Observação: os `Dockerfile`s do frontend não estão presentes neste repositório; o foco desta entrega é o backend com microserviços e gateway.
 
 ---
 
